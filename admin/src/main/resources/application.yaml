@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://localhost:3306/platform?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
     username: root
     password: 123
+  devtools:
+    restart:
+      exclude: files/**
 
 jwt:
   header: jwtHeader
@@ -16,3 +19,9 @@ jwt:
     refresh: /auth/refresh #刷新Token的地址
     register: /auth/register   # 注册用户，这个接口后续需要改变
     info: /auth/info # 获取当前登录用户的信息   
+    logout: /auth/logout
+
+
+
+resource:
+  local_files_path: src/main/resources/files

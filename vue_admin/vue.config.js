@@ -3,12 +3,13 @@ module.exports = {
     // 将baseUrl: '/api',改为baseUrl: '/',
     baseUrl: '/',
     devServer: {
+        port:8299,
         proxy: {
-            '^/auth': {
-                target: 'http://localhost:8080',
+            '/': {
+                target: 'http://10.108.117.226:8080',
                 changeOrigin: true,
                 ws: true,
-            }
+            },
         }
     },
     outputDir: 'target/dist',

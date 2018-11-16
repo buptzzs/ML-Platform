@@ -32,6 +32,10 @@ service.interceptors.response.use(
      */
     const res = response.data
     console.log(res)
+    if (!res.hasOwnProperty('status')){
+      return response
+    }
+
     if (res.status !== 200) {
       console.log(res.status)
       Message({

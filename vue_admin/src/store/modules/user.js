@@ -5,7 +5,7 @@ const user = {
   state: {
     token: getToken(),
     name: '',
-    avatar: '',
+    avatar: 'https://img.aitaotu.cc:8089/Pics/2018/0611/52/003.jpg',
     roles: []
   },
 

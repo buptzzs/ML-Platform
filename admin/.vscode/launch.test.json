@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "admin",
+                "projectName": "admin",
+                "workingDirectory": "c:\\代码相关\\平台\\测试用文件夹\\测试工程\\admin",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "admin",
+                "projectName": "admin",
+                "workingDirectory": "c:\\代码相关\\平台\\测试用文件夹\\测试工程\\admin",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

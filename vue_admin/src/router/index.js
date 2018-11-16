@@ -37,16 +37,27 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/form',
+    path: '/resourceManage',
     component: Layout,
+    meta: { title: '资源管理', icon: 'form' },
+    redirect: '/resourceManage/data',
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: '/resourceManage/data',
+        component: () => import('@/views/resourceManage/index'),
+        props: { type: 'data'},
+        meta: { title: '数据文件' }
+
+      },
+      {
+        path: '/resourceManage/model',
+        component: () => import('@/views/resourceManage/index'),
+        props: { type: 'model' },
+        meta: { title: '模型文件' }
+
       }
     ]
+    
   },
 
 
