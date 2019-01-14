@@ -5,8 +5,11 @@ const user = {
   state: {
     token: getToken(),
     name: '',
-    avatar: 'https://img.aitaotu.cc:8089/Pics/2018/0611/52/003.jpg',
-    roles: []
+    avatar: 'http://img.wowoqq.com/allimg/180515/1-1P515062329-52.jpg',
+    roles: [],
+    taskname: '',
+    beginFile: '',
+    endFile: ''
   },
 
   mutations: {
@@ -21,6 +24,15 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_TASKNAME: (state, name) => {
+      state.taskname = name
+    },
+    SET_BEGINFILE: (state, name) => {
+      state.beginFile = name
+    },
+    SET_ENDFILE: (state, name) => {
+      state.endFile = name
     }
   },
 

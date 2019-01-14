@@ -21,7 +21,8 @@ jwt:
     info: /auth/info # 获取当前登录用户的信息   
     logout: /auth/logout
 
-
+path:
+  python_file_path: C:/代码相关/实验室/测试用文件夹/测试工程/admin/src/main/java/com/example/admin/algorithms/python
 
 resource:
   local_files_path: src/main/resources/files

@@ -2,6 +2,69 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - ComponentTask",
+            "request": "launch",
+            "mainClass": "com.example.admin.algorithms.ComponentTask",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - AlComponentService",
+            "request": "launch",
+            "mainClass": "com.example.admin.service.AlComponentService",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - UserTaskInfo",
+            "request": "launch",
+            "mainClass": "com.example.admin.entity.UserTaskInfo",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - ComponentManager",
+            "request": "launch",
+            "mainClass": "com.example.admin.algorithms.ComponentManager",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Runner",
+            "request": "launch",
+            "mainClass": "com.example.admin.algorithms.Runner",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FileComponent",
+            "request": "launch",
+            "mainClass": "com.example.admin.algorithms.components.FileComponent",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RunUtil",
+            "request": "launch",
+            "mainClass": "com.example.admin.algorithms.RunUtil",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DemoComponent",
+            "request": "launch",
+            "mainClass": "com.example.admin.algorithms.DemoComponent",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - PropertiesTest",
+            "request": "launch",
+            "mainClass": "com.example.admin.PropertiesTest",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - AdminApplication",
             "request": "launch",
             "cwd": "${workspaceFolder}",

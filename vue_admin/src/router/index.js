@@ -39,25 +39,47 @@ export const constantRouterMap = [
   {
     path: '/resourceManage',
     component: Layout,
-    meta: { title: '资源管理', icon: 'form' },
+    meta: { title: '资源管理', icon: 'manage' },
     redirect: '/resourceManage/data',
     children: [
       {
         path: '/resourceManage/data',
         component: () => import('@/views/resourceManage/index'),
         props: { type: 'data'},
-        meta: { title: '数据文件' }
+        meta: { title: '数据文件', icon: 'file'}
 
       },
       {
         path: '/resourceManage/model',
         component: () => import('@/views/resourceManage/index'),
         props: { type: 'model' },
-        meta: { title: '模型文件' }
+        meta: { title: '模型文件', icon: 'file' }
 
       }
     ]
     
+  },{
+    path: '/taskManage',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'TaskManage',
+        component: () => import('@/views/taskManage/index'),
+        meta: { title: '任务管理' , icon: 'tasks'},
+      }
+    ]
+  },{
+    path: '/editor',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'editor',
+        component: () => import('@/views/editor/model-flow'),
+        meta: { title:'实验台', icon: 'tree'}
+      }
+    ]
   },
 
 

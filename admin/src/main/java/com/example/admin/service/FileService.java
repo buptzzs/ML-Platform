@@ -24,5 +24,8 @@ public interface FileService {
 
     Resource loadAsResource(String username, String type, String filename);
 
+    List<String> listDirs(String username, String type);
+
+    boolean deleteDir(String username, String type, String dirname);
 
 } 
