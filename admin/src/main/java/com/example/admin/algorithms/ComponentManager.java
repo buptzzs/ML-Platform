@@ -47,14 +47,5 @@ public class ComponentManager {
         return task;
     }
 
-    /*
-    public static void main(String[] args) {
-        ComponentManager manager = new ComponentManager();
 
-        String name = "FileComponent";
-        AlComponent component = manager.createComponentByName(name);
-        System.out.println(component.params);
- 
-    }
-    */
 }

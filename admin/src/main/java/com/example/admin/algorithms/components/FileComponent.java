@@ -48,16 +48,4 @@ public class FileComponent extends AlComponent {
         }
     }
 
-    /*
-    public static void main(String[] args) {
-        FileComponent component = new FileComponent();
-        String root = "src\\main\\resources\\files\\admin";
-        String inFile = "demoData.txt";
-        String outFile = "demoComponent";
-        RunResult res = component.run(root, inFile, outFile);
-        System.out.print(res.getSuccess());
-        System.out.println(res.getRunLog());
-        System.out.println(res.getErrorLog());
-    }
-    */
 }
