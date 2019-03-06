@@ -34,6 +34,20 @@ mvn clean install
 ```
 mvn run
 ```
+
+如果出现下载失败的情况，很可能是网络访问问题，添加国内镜像即可解决
+
+修改maven conf 文件夹下的 setting.xml文件如下：
+```
+<mirrors>
+    <mirror>
+      <id>alimaven</id>
+      <name>aliyun maven</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <mirrorOf>central</mirrorOf>        
+    </mirror>
+  </mirrors>
+```
 ### 运行前端
 
 在前端根目录下,运行:
