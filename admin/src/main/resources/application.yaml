@@ -9,20 +9,21 @@ spring:
   devtools:
     restart:
       exclude: files/**
-
 jwt:
   header: jwtHeader
   secret: eyJleHAiOjE1NDMyMDUyODUsInN1YiI6ImFkbWluIiwiY3Jl #jwt 的加密字符串
   expiration: 36000000
   route:
-    login: /auth/login     #登录地址
-    refresh: /auth/refresh #刷新Token的地址
-    register: /auth/register   # 注册用户，这个接口后续需要改变
-    info: /auth/info # 获取当前登录用户的信息   
-    logout: /auth/logout
+    login: '/auth/login'     #登录地址
+    refresh: '/auth/refresh' #刷新Token的地址
+    register: "/auth/register"  # 注册用户，这个接口后续需要改变
+    info: '/auth/info' # 获取当前登录用户的信息   
+    logout: '/auth/logout'
 
 path:
-  python_file_path: C:/代码相关/实验室/测试用文件夹/测试工程/admin/src/main/java/com/example/admin/algorithms/python
+  pyPath: 'src\\main\\resources\\python\\'
+  env: 'C:\\代码相关\\实验室\\测试用文件夹\\测试工程\\admin'
 
 resource:
   local_files_path: src/main/resources/files
+

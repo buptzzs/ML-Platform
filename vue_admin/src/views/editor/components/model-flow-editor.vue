@@ -24,13 +24,6 @@
                     </li>
                     <li
                         class="getItem"
-                        data-shape="PS-SMART"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>PS-SMART 分类
-                    </li>
-                    <li
-                        class="getItem"
                         data-shape="FileComponent"
                         data-type="node"
                         data-size="170*34">
@@ -38,11 +31,11 @@
                     </li>
                     <li
                         class="getItem"
-                        data-shape="Bayes"
+                        data-shape="LinearRegression"
                         data-type="node"
                         data-size="170*34">
-                        <span class="pannel-type-icon"/>朴素贝叶斯
-                    </li>
+                        <span class="pannel-type-icon"/>线性回归
+                    </li>                    
                 </ul>
             </div>
             <div id="detailpannel">

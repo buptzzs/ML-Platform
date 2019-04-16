@@ -253,6 +253,37 @@ Flow.registerNode('FileComponent', {
     ]
 }, 'model-card');
 
+
+Flow.registerNode('LinearRegression', {
+    label: '线性回归',
+    color_type: '#FAAD14',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'linear_test',
+        },
+        {
+            name: 'model',
+            value: '',
+        },
+
+    ]
+}, 'model-card');
+
 // const MIN_ARROW_SIZE = 3;
 // Flow.registerEdge('line', {
 //     draw(item) {

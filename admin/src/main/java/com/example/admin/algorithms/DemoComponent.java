@@ -3,7 +3,10 @@ package com.example.admin.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.admin.service.RunUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 public class DemoComponent extends AlComponent {
 
@@ -11,8 +14,8 @@ public class DemoComponent extends AlComponent {
 
     
 
-    
-    private RunUtil runUtil = new RunUtil();
+    @Autowired
+    private RunUtil runUtil;
 
     public DemoComponent() {
         params = new DemoParams();
