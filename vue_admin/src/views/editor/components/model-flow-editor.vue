@@ -13,7 +13,7 @@
                         data-shape="k-means"
                         data-type="node"
                         data-size="170*34">
-                        <span class="pannel-type-icon"/>K 均值聚类
+                        <span class="pannel-type-icon"/>K均值聚类
                     </li>
                     <li
                         class="getItem"
@@ -35,7 +35,49 @@
                         data-type="node"
                         data-size="170*34">
                         <span class="pannel-type-icon"/>线性回归
-                    </li>                    
+                    </li>
+                    <li
+                        class="getItem"
+                        data-shape="Bayes"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>朴素贝叶斯
+                    </li>    
+                    <li
+                        class="getItem"
+                        data-shape="SupportVectorMachine"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>支持向量机
+                    </li>
+                    <li
+                        class="getItem"
+                        data-shape="SupportVectorRegression"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>支持向量回归
+                    </li>  
+                    <li
+                        class="getItem"
+                        data-shape="DecisionTree"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>决策树
+                    </li>               
+                    <li
+                        class="getItem"
+                        data-shape="LogisticRegression"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>逻辑回归
+                    </li>
+                    <li
+                        class="getItem"
+                        data-shape="KNearestNeighbor"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>K最近邻
+                    </li>
                 </ul>
             </div>
             <div id="detailpannel">
@@ -116,7 +158,6 @@ import Page from './page';
 import Editor from './editor';
 import './register-items.js';
 import {saveTask, getTask} from '@/api/userTask'
-
 export default {
     components: {
         Navigator,
@@ -141,7 +182,6 @@ export default {
             },
             set(value) {
                 this.updateGraph('label', value);
-
                 this.tempInputingLabel = null;
             }
         },
@@ -154,7 +194,6 @@ export default {
                 this.updateGraph('params', value)
                 this.tempParams = null
             }
-
         },
         color: {
             get() {
@@ -172,7 +211,6 @@ export default {
         page.changeAddEdgeModel({
             shape: 'line'
         });
-
         // 输入锚点不可以连出边
         page.on('hoveranchor:beforeaddedge', ev => {
             if (ev.anchor.type === 'input') {
@@ -193,9 +231,7 @@ export default {
                 ev.cancel = true;
             }
         });
-
         this.getUserTaskInfo();
-
     },
     methods: {
         saveData(taskname, beginFile, endFile) {
@@ -212,15 +248,12 @@ export default {
             saveTask(params).then(response => {
                 this.$message("保存成功");
             })
-
         },
-
         changeEage(type) {
             this.page.changeAddEdgeModel({
                 shape: type
             });
         },
-
         getUserTaskInfo() {
             const taskname = this.$store.getters.taskname;
             if(taskname.length == 0){
@@ -238,14 +271,9 @@ export default {
                     console.log(task_info)
                     this.data = JSON.parse(s_data)
                     this.page.read(this.data)
-
                 })
             }
-
-
         }
-
-
     }
 };
 </script>
