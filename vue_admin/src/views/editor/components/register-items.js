@@ -120,8 +120,6 @@ Flow.registerNode('model-card', {
     ]
 });
 
-<<<<<<< HEAD
-=======
 // k 均值聚类
 Flow.registerNode('k-means', {
     label: 'k均值聚类',
@@ -141,6 +139,7 @@ Flow.registerNode('k-means', {
         {
             name: 'train',
             value: 'false',
+            type:'bool'
         }, {
             name: 'n_clusters',
             value: '0',
@@ -175,49 +174,24 @@ Flow.registerNode('random-forest', {
         {
             name: 'train',
             value: 'false',
+            type:'bool'
         }, {
             name: 'ratio',
             value: '0.2',
+            type:'str'
         }, {
             name: 'model_name',
             value: 'random_forest_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type:'model'
         },
     ]
 }, 'model-card');
 
-// PS-SMART 分类
-Flow.registerNode('PS-SMART', {
-    label: 'PS-SMART 分类',
-    color_type: '#1890FF',
-    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
-    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
-    // 设置锚点
-    anchor: [
-        [ 0.5, 0, {
-            type: 'input'
-        }],
-        [ 0.33, 1, {
-            type: 'output'
-        }],
-        [ 0.66, 1, {
-            type: 'output'
-        }]
-    ],
-    params: [
-        {
-            name: 'model_name',
-            value: 'ps-smart',
-        }, {
-            name: 'lr',
-            value: '0.01',
-        },
-
-    ]
-}, 'model-card');
 
 // 朴素贝叶斯
 Flow.registerNode('Bayes', {
@@ -238,20 +212,23 @@ Flow.registerNode('Bayes', {
         {
             name: 'train',
             value: 'false',
+            type: 'bool'
         }, {
             name: 'ratio',
             value: '0.2',
+            type:'str',
         }, {
             name: 'model_name',
             value: 'Bayes_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type:'model'
         },
     ]
 }, 'model-card');
->>>>>>> 232f3b5a3c3c30186785f7eb45dcbdc6916a6595
 
 // 读数据表
 Flow.registerNode('FileComponent', {
@@ -294,16 +271,20 @@ Flow.registerNode('SupportVectorMachine', {
         {
             name: 'train',
             value: 'false',
+            type:'str'
         }, {
             name: 'ratio',
             value: '0.2',
+            type:'str'
         }, {
             name: 'model_name',
             value: 'SVM_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type:'model'
         },
     ]
 }, 'model-card');
@@ -323,16 +304,20 @@ Flow.registerNode('SupportVectorRegression', {
         {
             name: 'train',
             value: 'false',
+            type:'bool'
         }, {
             name: 'ratio',
             value: '0.2',
+            type: 'str'
         }, {
             name: 'model_name',
             value: 'SVR_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type: 'model'
         },
 
     ]
@@ -387,16 +372,20 @@ Flow.registerNode('DecisionTree', {
         {
             name: 'train',
             value: 'false',
+            type:'bool'            
         }, {
             name: 'ratio',
             value: '0.2',
+            type:'str'
         }, {
             name: 'model_name',
             value: 'decision_tree_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type:'model'
         },
 
     ]
@@ -417,16 +406,20 @@ Flow.registerNode('LogisticRegression', {
         {
             name: 'train',
             value: 'false',
+            type:'bool'
         }, {
             name: 'ratio',
             value: '0.2',
+            type: 'str'
         }, {
             name: 'model_name',
             value: 'logistic_regression_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type: 'model'
         },
 
     ]
@@ -447,16 +440,20 @@ Flow.registerNode('KNearestNeighbor', {
         {
             name: 'train',
             value: 'false',
+            type: 'bool'
         }, {
             name: 'ratio',
             value: '0.2',
+            type: 'str'
         }, {
             name: 'model_name',
             value: 'KNearestNeighbor_test',
+            type: 'str'
         },
         {
             name: 'model',
             value: '',
+            type: 'model'
         },
 
     ]

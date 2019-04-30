@@ -3,7 +3,7 @@
         <toolbar
             @save="saveData"
             @change-eage="changeEage"/>
-        <div :style="{height:'42px'}"/>
+        <div :style="{height:'50px'}"/>
         <div class="bottom-container">
             <context-menu />
             <div id="itempannel">
@@ -332,6 +332,12 @@ export default {
 #itempannel ul{
   padding: 0px;
   padding-left: 16px;
+}
+#itempannel .el-menu-vertical-demo{
+  height: 50%;
+  padding: 10px;
+  padding-left: 16px;
+  display: inline-block;
 }
 #itempannel li{
   color: rgba(0,0,0,0.65);

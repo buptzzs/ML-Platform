@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LinearRegression extends AlComponent {
 
-    private static String pyFile = "linearRegression.py";
+    private static String pyFile = "linear_regression.py";
 
     private RunUtil runUtil = new RunUtil();
 
