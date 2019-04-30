@@ -12,7 +12,7 @@
             </el-col>
             <el-col :span="5" :offset="4">
                 <el-input 
-                    placeholder="请输入文件名"
+                    placeholder="请输入文件名进行搜索"
                     suffix-icon="el-icon-search"
                     v-model="filters[0].value">
                 </el-input>

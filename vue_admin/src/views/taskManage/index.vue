@@ -4,10 +4,10 @@
             <el-row>
                 <div style="margin-bottom: 15px;">
                     <el-input v-model="input" placeholder="新建任务名">
-                        <el-button  slot="append" icon="el-icon-plus" v-on:click="addUserTask">
+                        <el-button title="添加" slot="append" icon="el-icon-plus" v-on:click="addUserTask">
                         </el-button>
                     </el-input>
-                    <el-button   icon="el-icon-refresh" @click="getUserTasks" >
+                    <el-button  title="刷新" icon="el-icon-refresh" @click="getUserTasks" >
                     </el-button>
                 </div>
             </el-row>
