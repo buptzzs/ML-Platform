@@ -122,7 +122,7 @@ Flow.registerNode('model-card', {
 
 // k 均值聚类
 Flow.registerNode('k-means', {
-    label: 'k 均值聚类',
+    label: 'k均值聚类',
     color_type: '#1890FF',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
@@ -137,13 +137,19 @@ Flow.registerNode('k-means', {
     ],
     params: [
         {
-            name: 'model_name',
-            value: 'ps-smart',
+            name: 'train',
+            value: 'false',
         }, {
-            name: 'lr',
-            value: '0.01',
+            name: 'n_clusters',
+            value: '0',
+        }, {
+            name: 'model_name',
+            value: 'kmeans_test',
         },
-
+        {
+            name: 'model',
+            value: '',
+        },
     ]
 }, 'model-card');
 
@@ -165,13 +171,19 @@ Flow.registerNode('random-forest', {
 
     params: [
         {
-            name: 'model_name',
-            value: 'test_name',
+            name: 'train',
+            value: 'false',
         }, {
-            name: 'lr',
-            value: '0.01',
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'random_forest_test',
         },
-
+        {
+            name: 'model',
+            value: '',
+        },
     ]
 }, 'model-card');
 
@@ -208,7 +220,7 @@ Flow.registerNode('PS-SMART', {
 // 朴素贝叶斯
 Flow.registerNode('Bayes', {
     label: '朴素贝叶斯',
-    color_type: '#9254DE',
+    color_type: '#6495ED',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
     // 设置锚点
@@ -220,12 +232,21 @@ Flow.registerNode('Bayes', {
             type: 'output'
         }]
     ],
-    params: [ 
+    params: [
         {
-            name: 'lr',
-            value: '0.01',
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'Bayes_test',
         },
-
+        {
+            name: 'model',
+            value: '',
+        },
     ]
 }, 'model-card');
 
@@ -253,10 +274,68 @@ Flow.registerNode('FileComponent', {
     ]
 }, 'model-card');
 
+Flow.registerNode('SupportVectorMachine', {
+    label: '支持向量机',
+    color_type: '#FF0000',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'SVM_test',
+        },
+        {
+            name: 'model',
+            value: '',
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('SupportVectorRegression', {
+    label: '支持向量回归',
+    color_type: '#CDCDC1',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'SVR_test',
+        },
+        {
+            name: 'model',
+            value: '',
+        },
+
+    ]
+}, 'model-card');
 
 Flow.registerNode('LinearRegression', {
     label: '线性回归',
-    color_type: '#FAAD14',
+    color_type: '#0000EE',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
     // 设置锚点
@@ -284,6 +363,95 @@ Flow.registerNode('LinearRegression', {
     ]
 }, 'model-card');
 
+Flow.registerNode('DecisionTree', {
+    label: '决策树',
+    color_type: '#1C1C1C',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'decision_tree_test',
+        },
+        {
+            name: 'model',
+            value: '',
+        },
+
+    ]
+}, 'model-card');
+
+Flow.registerNode('LogisticRegression', {
+    label: '逻辑回归',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'logistic_regression_test',
+        },
+        {
+            name: 'model',
+            value: '',
+        },
+
+    ]
+}, 'model-card');
+
+Flow.registerNode('KNearestNeighbor', {
+    label: 'K最近邻',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+        }, {
+            name: 'ratio',
+            value: '0.2',
+        }, {
+            name: 'model_name',
+            value: 'KNearestNeighbor_test',
+        },
+        {
+            name: 'model',
+            value: '',
+        },
+
+    ]
+}, 'model-card');
 // const MIN_ARROW_SIZE = 3;
 // Flow.registerEdge('line', {
 //     draw(item) {
