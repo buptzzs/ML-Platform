@@ -13,7 +13,7 @@
                         data-shape="k-means"
                         data-type="node"
                         data-size="170*34">
-                        <span class="pannel-type-icon"/>K 均值聚类
+                        <span class="pannel-type-icon"/>K均值聚类
                     </li>
                     <li
                         class="getItem"
@@ -35,7 +35,49 @@
                         data-type="node"
                         data-size="170*34">
                         <span class="pannel-type-icon"/>线性回归
-                    </li>                    
+                    </li>
+                    <li
+                        class="getItem"
+                        data-shape="Bayes"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>朴素贝叶斯
+                    </li>    
+                    <li
+                        class="getItem"
+                        data-shape="SupportVectorMachine"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>支持向量机
+                    </li>
+                    <li
+                        class="getItem"
+                        data-shape="SupportVectorRegression"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>支持向量回归
+                    </li>  
+                    <li
+                        class="getItem"
+                        data-shape="DecisionTree"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>决策树
+                    </li>               
+                    <li
+                        class="getItem"
+                        data-shape="LogisticRegression"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>逻辑回归
+                    </li>
+                    <li
+                        class="getItem"
+                        data-shape="KNearestNeighbor"
+                        data-type="node"
+                        data-size="170*34">
+                        <span class="pannel-type-icon"/>K最近邻
+                    </li>
                 </ul>
             </div>
             <div id="detailpannel">
@@ -66,13 +108,33 @@
                                 </el-form>
                             </div>
                             <div >
-                                <el-form label-width="60px">
+                                <el-form label-width="100px">
                                     <el-form-item
                                         v-for="param in inputingParams"
                                         v-bind:key="param.name"
                                         :label="param.name"
                                         >
-                                        <el-input v-model="param.value"/>
+                                        <div v-if="param.type=='bool'">
+                                             <el-radio-group v-model="param.value">
+                                                <el-radio  label='true'/>
+                                                <el-radio label='false'/>
+                                              </el-radio-group>
+                                        </div>
+                                        <div v-else-if="param.type=='model'">
+                                            <el-select v-model="param.value" placeholder="请选择">
+                                                <el-option
+                                                    v-for="file in model_files"
+                                                    :key="file.name"
+                                                    :label="file.name"
+                                                    :value="file.name"
+                                                >
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                        <div v-else>
+                                            <el-input v-model="param.value"/>
+                                        </div>                                        
+
                                     </el-form-item>
                                 </el-form>
                             </div>
@@ -116,6 +178,8 @@ import Page from './page';
 import Editor from './editor';
 import './register-items.js';
 import {saveTask, getTask} from '@/api/userTask'
+import {getFileInfos} from '@/api/file'
+
 
 export default {
     components: {
@@ -132,6 +196,7 @@ export default {
             tempColor: '',
             tempParams: null,
             data : {},
+            model_files:[]
         };
     },
     computed: {
@@ -141,7 +206,6 @@ export default {
             },
             set(value) {
                 this.updateGraph('label', value);
-
                 this.tempInputingLabel = null;
             }
         },
@@ -154,7 +218,6 @@ export default {
                 this.updateGraph('params', value)
                 this.tempParams = null
             }
-
         },
         color: {
             get() {
@@ -172,7 +235,6 @@ export default {
         page.changeAddEdgeModel({
             shape: 'line'
         });
-
         // 输入锚点不可以连出边
         page.on('hoveranchor:beforeaddedge', ev => {
             if (ev.anchor.type === 'input') {
@@ -193,8 +255,8 @@ export default {
                 ev.cancel = true;
             }
         });
-
         this.getUserTaskInfo();
+        this.fetchModelData()
 
     },
     methods: {
@@ -212,15 +274,12 @@ export default {
             saveTask(params).then(response => {
                 this.$message("保存成功");
             })
-
         },
-
         changeEage(type) {
             this.page.changeAddEdgeModel({
                 shape: type
             });
         },
-
         getUserTaskInfo() {
             const taskname = this.$store.getters.taskname;
             if(taskname.length == 0){
@@ -238,12 +297,21 @@ export default {
                     console.log(task_info)
                     this.data = JSON.parse(s_data)
                     this.page.read(this.data)
-
                 })
             }
+        },
+        fetchModelData() {
+            const params = {
+                username: this.$store.getters.name,
+                type: 'model'
+            }
+            getFileInfos(params).then(response =>{
+                this.model_files = response.data
+                console.log(this.model_files)
+            })
+        },        
 
 
-        }
 
 
     }
@@ -294,7 +362,7 @@ export default {
   right: 0px;
   z-index: 2;
   background: #F7F9FB;
-  width: 200px;
+  width: 300px;
   border-left: 1px solid #E6E9ED;
 }
 #detailpannel .pannel{

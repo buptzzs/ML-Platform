@@ -1,6 +1,7 @@
 import pickle
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, r2_score
+import pandas as pd
 from joblib import dump, load
 import argparse
 import os
@@ -17,7 +18,7 @@ def main(args):
     #data_path = 'diabetes.dataset'
     data = pickle.load(open(data_path, 'rb'))
     assert 'data' in data
-    if args.train:
+    if args.train == 'true':
         ratio = args.ratio
         regr = linear_model.LinearRegression()
 
@@ -47,11 +48,16 @@ def main(args):
     else:
         # TODO: How to Save the prediction?
         model_path = os.path.join(model_dir,args.model)
-        regr = load(args.model)
+        regr = load(model_path)
         x = data['data']
         pred = regr.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -61,7 +67,7 @@ if __name__ == '__main__':
     parser.add_argument('--outFileName', type=str, help="output file's name")
     parser.add_argument('--root', type=str, help="file root")
 
-    parser.add_argument('--train', type=bool, default=True)
+    parser.add_argument('--train', type=str, default='true')
     parser.add_argument('--ratio', type=float, default=0.2)
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model', type=str)

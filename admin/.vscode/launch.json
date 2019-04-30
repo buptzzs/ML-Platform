@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Monitor",
+            "request": "launch",
+            "mainClass": "com.example.admin.monitor.Monitor",
+            "projectName": "admin"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - ComponentTask",
             "request": "launch",
             "mainClass": "com.example.admin.algorithms.ComponentTask",

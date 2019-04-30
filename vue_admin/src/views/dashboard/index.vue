@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{ name }}</div>
-    <div class="dashboard-text">role:{{ roles }}</div>
+    <div class="dashboard-text">用户名:{{ name }}</div>
+    <div class="dashboard-text">拥有权限:{{ roles }}</div>
   </div>
 </template>
 
