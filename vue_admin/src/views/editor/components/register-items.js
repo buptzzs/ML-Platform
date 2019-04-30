@@ -120,114 +120,6 @@ Flow.registerNode('model-card', {
     ]
 });
 
-// k 均值聚类
-Flow.registerNode('k-means', {
-    label: 'k 均值聚类',
-    color_type: '#1890FF',
-    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
-    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
-    // 设置锚点
-    anchor: [
-        [ 0.5, 0, {
-            type: 'input'
-        }], // 上面边的中点
-        [ 0.5, 1, {
-            type: 'output'
-        }] // 下边边的中点
-    ],
-    params: [
-        {
-            name: 'model_name',
-            value: 'ps-smart',
-        }, {
-            name: 'lr',
-            value: '0.01',
-        },
-
-    ]
-}, 'model-card');
-
-// 随机森林
-Flow.registerNode('random-forest', {
-    label: '随机森林',
-    color_type: '#9254DE',
-    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
-    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
-    // 设置锚点
-    anchor: [
-        [ 0.5, 0, {
-            type: 'input'
-        }],
-        [ 0.5, 1, {
-            type: 'output'
-        }]
-    ],
-
-    params: [
-        {
-            name: 'model_name',
-            value: 'test_name',
-        }, {
-            name: 'lr',
-            value: '0.01',
-        },
-
-    ]
-}, 'model-card');
-
-// PS-SMART 分类
-Flow.registerNode('PS-SMART', {
-    label: 'PS-SMART 分类',
-    color_type: '#1890FF',
-    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
-    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
-    // 设置锚点
-    anchor: [
-        [ 0.5, 0, {
-            type: 'input'
-        }],
-        [ 0.33, 1, {
-            type: 'output'
-        }],
-        [ 0.66, 1, {
-            type: 'output'
-        }]
-    ],
-    params: [
-        {
-            name: 'model_name',
-            value: 'ps-smart',
-        }, {
-            name: 'lr',
-            value: '0.01',
-        },
-
-    ]
-}, 'model-card');
-
-// 朴素贝叶斯
-Flow.registerNode('Bayes', {
-    label: '朴素贝叶斯',
-    color_type: '#9254DE',
-    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
-    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
-    // 设置锚点
-    anchor: [
-        [ 0.5, 0, {
-            type: 'input'
-        }],
-        [ 0.5, 1, {
-            type: 'output'
-        }]
-    ],
-    params: [ 
-        {
-            name: 'lr',
-            value: '0.01',
-        },
-
-    ]
-}, 'model-card');
 
 // 读数据表
 Flow.registerNode('FileComponent', {
@@ -245,9 +137,11 @@ Flow.registerNode('FileComponent', {
         {
             name: 'inType',
             value: 'csv',
+            type:'str'
         }, {
             name: 'outType',
             value: 'json',
+            type:'str'
         },
 
     ]
@@ -269,16 +163,20 @@ Flow.registerNode('LinearRegression', {
         {
             name: 'train',
             value: 'false',
+            type:'bool',
         }, {
             name: 'ratio',
             value: '0.2',
+            type:'str'
         }, {
             name: 'model_name',
             value: 'linear_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type: 'model'
         },
 
     ]

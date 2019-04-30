@@ -32,7 +32,7 @@
         <span class="separator"/>
         <el-radio-group
             v-model="lineType"
-            size="mini">
+            size="mini" >
             <el-radio-button label="line" title="虚线">
                 <svg-icon icon-class="dotted_line" />
             </el-radio-button>
@@ -45,7 +45,7 @@
         </el-radio-group>
         <span class="separator"/>
         任务名:{{taskname.length == 0 ? "当前任务为空": taskname}} |
-        <el-select size="small" v-model="curBeginFile" placeholder="输入文件">
+        <el-select size="small" v-model="curBeginFile" placeholder="输入文件" > 
             <el-option
                 v-for="file in files"
                 :key="file.name"
@@ -159,6 +159,8 @@ export default {
   display: inline-block;
   border: 1px solid rgba(2,2,2,0);
 }
+
+
 #toolbar .command:nth-of-type(1){
   margin-left: 24px;
 }

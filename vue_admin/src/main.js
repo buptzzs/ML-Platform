@@ -16,10 +16,13 @@ import store from './store'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import VCharts from 'v-charts'
 
 
 Vue.use(ElementUI, { locale })
 Vue.use(DataTables)
+Vue.use(VCharts)
+
 
 Vue.config.productionTip = false
 
