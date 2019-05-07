@@ -1,9 +1,11 @@
 import pickle
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import pandas as pd
+
 model = 'naive_bayes'
 
 
@@ -19,7 +21,7 @@ def main(args):
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        gnb = GaussianNB()
+        clf = ComplementNB(alpha=args.alpha,fit_prior=args.fit_prior,norm=args.norm)
 
         assert 'target' in data
 
@@ -33,22 +35,27 @@ def main(args):
         y_train = labels[ratio_num:]
         y_test = labels[:ratio_num]
 
-        gnb.fit(x_train, y_train)
-        y_pred = gnb.predict(x_test)
+        clf.fit(x_train, y_train)
+        y_pred = clf.predict(x_test)
 
         # The accuracy
         print('Accuracy: \n',accuracy_score(y_test, y_pred))
 
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
-        dump(gnb, model_path)
+        dump(clf, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model_path)
-        gnb = load(args.model)
+        model_path = os.path.join(model_dir,args.model)
+        clf = load(model_path)
         x = data['data']
-        pred = gnb.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        pred = clf.predict(x)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -63,6 +70,9 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
+    parser.add_argument('--alpha', type=float, default=1.0)
+    parser.add_argument('--fit_prior', type=bool, default=True)
+    parser.add_argument('--norm', type=bool, default=False)
 
     args = parser.parse_args()
     print(args)

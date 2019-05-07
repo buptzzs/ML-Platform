@@ -4,6 +4,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import pandas as pd
+from sklearn.datasets import load_digits
 model = 'tree'
 
 
@@ -14,12 +16,12 @@ def main(args):
 
     data_path = os.path.join(data_dir, args.inFile)
     print('load data from'+data_path)
-    #data_path = 'diabetes.dataset'
+    
     data = pickle.load(open(data_path, 'rb'))
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        regr = tree.DecisionTreeClassifier()
+        regr = tree.DecisionTreeClassifier(min_samples_split=args.min_samples_split,min_samples_leaf=args.min_samples_leaf)
 
         assert 'target' in data
 
@@ -44,12 +46,17 @@ def main(args):
         dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model_path)
-        regr = load(args.model)
+        model_path = os.path.join(model_dir,args.model)
+        regr = load(model_path)
         x = data['data']
         pred = regr.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -63,7 +70,11 @@ if __name__ == '__main__':
     parser.add_argument('--ratio', type=float, default=0.2)
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
+    
 
+    parser.add_argument('--min_samples_split', type=float,default=2)
+    parser.add_argument('--min_samples_leaf', type=float,default=1)
+    
 
     args = parser.parse_args()
     print(args)

@@ -4,6 +4,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import pandas as pd
 model = 'linear_model'
 
 
@@ -19,7 +20,7 @@ def main(args):
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        clf = linear_model.LogisticRegression()
+        clf = linear_model.LogisticRegression(dual=args.dual,C=args.C,fit_intercept=args.fit_intercept,intercept_scaling=args.intercept_scaling)
 
         assert 'target' in data
 
@@ -33,7 +34,7 @@ def main(args):
         y_train = labels[ratio_num:]
         y_test = labels[:ratio_num]
 
-        clf.fit(x_train, y_train)
+        clf.fit(x_train, y_train.astype(int))
         y_pred = clf.predict(x_test)
 
         # The coefficients
@@ -45,13 +46,18 @@ def main(args):
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(clf, model_path)
     else:
-        # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model_path)
-        clf = load(args.model)
+         # TODO: How to Save the prediction?
+        model_path = os.path.join(model_dir,args.model)
+        clf = load(model_path)
         x = data['data']
         pred = clf.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -66,8 +72,13 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
-
+    parser.add_argument('--dual', type=bool, default=False)
+    parser.add_argument('--C', type=float, default=1.0)
+    parser.add_argument('--fit_intercept', type=bool, default=True)
+    parser.add_argument('--intercept_scaling', type=float, default=1.0)
+      
     args = parser.parse_args()
+    
     print(args)
 
     main(args)

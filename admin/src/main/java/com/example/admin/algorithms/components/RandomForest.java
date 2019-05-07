@@ -9,9 +9,7 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,10 +52,15 @@ public class RandomForest extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "False");
+            setParam("train", "True");
             setParam("ratio", "0.2");
             setParam("model_name", "random_forest_test");
             setParam("model","");
+            setParam("n_estimators", "10");
+            setParam("min_samples_split", "2");
+            setParam("min_impurity_decrease", "0");
+            setParam("min_samples_leaf","1");
+            
         }
     }
 

@@ -52,7 +52,7 @@ public class LinearRegression extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "train");
+            setParam("train", "True");
             setParam("ratio", "0.2");
             setParam("model_name", "linear_test");
             setParam("model","");

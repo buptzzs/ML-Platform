@@ -9,7 +9,7 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 public class FileComponent extends AlComponent {
 

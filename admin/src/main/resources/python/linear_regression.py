@@ -5,9 +5,11 @@ import pandas as pd
 from joblib import dump, load
 import argparse
 import os
+from sklearn.datasets import load_boston
 model = 'linear_model'
 
 
+    
 def main(args):
     model_name = args.model_name
     model_dir = os.path.join(args.root, "model")  # get model dir
@@ -15,10 +17,11 @@ def main(args):
 
     data_path = os.path.join(data_dir, args.inFile)
     print('load data from'+data_path)
-    #data_path = 'diabetes.dataset'
-    data = pickle.load(open(data_path, 'rb'))
+    da,target = load_boston(return_X_y=True)
+    data = {'data':da,'target':target}
+    #data = pickle.load(open(data_path, 'rb'))
     assert 'data' in data
-    if args.train == 'true':
+    if args.train :
         ratio = args.ratio
         regr = linear_model.LinearRegression()
 
@@ -63,14 +66,14 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--inFile', type=str, help='input file path')
-    parser.add_argument('--outFileName', type=str, help="output file's name")
-    parser.add_argument('--root', type=str, help="file root")
+    parser.add_argument('--inFile', type=str, default='a',help='input file path')
+    parser.add_argument('--outFileName', type=str,default='b', help="output file's name")
+    parser.add_argument('--root', type=str, default='/Users/raochengkai/Documents/ML-Platform-master/admin/src/main/resources/files/admin',help="file root")
 
-    parser.add_argument('--train', type=str, default='true')
+    parser.add_argument('--train', type=bool, default=True)
     parser.add_argument('--ratio', type=float, default=0.2)
-    parser.add_argument('--model_name', type=str)
-    parser.add_argument('--model', type=str)
+    parser.add_argument('--model_name', type=str,default='c')
+    parser.add_argument('--model', type=str,default='')
 
 
     args = parser.parse_args()

@@ -4,6 +4,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import pandas as pd
+
 model = 'neighbors'
 
 
@@ -14,12 +16,12 @@ def main(args):
 
     data_path = os.path.join(data_dir, args.inFile)
     print('load data from'+data_path)
-    #data_path = 'diabetes.dataset'
+   
     data = pickle.load(open(data_path, 'rb'))
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        regr = neighbors.KNeighborsClassifier()
+        regr = neighbors.KNeighborsClassifier(n_neighbors=args.n_neighbors,leaf_size=args.leaf_size,p=args.p)
 
         assert 'target' in data
 
@@ -43,12 +45,17 @@ def main(args):
         dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model_path)
-        regr = load(args.model)
+        model_path = os.path.join(model_dir,args.model)
+        regr = load(model_path)
         x = data['data']
         pred = regr.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -63,7 +70,10 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
-
+    parser.add_argument('--n_neighbors', type=int, default=5)
+    parser.add_argument('--leaf_size', type=int, default=30)
+    parser.add_argument('--p', type=int, default=2)
+    
     args = parser.parse_args()
     print(args)
 

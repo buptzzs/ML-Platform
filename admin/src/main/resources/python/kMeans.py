@@ -4,6 +4,7 @@ from sklearn.metrics import adjusted_rand_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import pandas as pd
 model = 'cluster'
 
 
@@ -19,28 +20,28 @@ def main(args):
     assert 'data' in data
     if args.train:
         k = args.n_clusters
-        regr = cluster.KMeans(n_clusters=k, random_state=random_state)
+        regr = cluster.KMeans(n_clusters=k, random_state='random_state')
 
-        assert 'target' in data
 
         features = data['data']
-        labels = data['target']
 
         pred = regr.fit_predict(features)
-
-        # The Adjusted rand index
-         print('Adjusted rand index: \n',adjusted_rand_score(labels, pred))
-
+        
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model_path)
-        regr = load(args.model)
+        model_path = os.path.join(model_dir,args.model)
+        regr = load(model_path)
         x = data['data']
-        pred = regr.fit_predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        pred = regr.predict(x)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -49,12 +50,11 @@ if __name__ == '__main__':
     parser.add_argument('--inFile', type=str, help='input file path')
     parser.add_argument('--outFileName', type=str, help="output file's name")
     parser.add_argument('--root', type=str, help="file root")
-
     parser.add_argument('--train', type=bool, default=True)
-    parser.add_argument('--n_clusters', type=int, default=0)
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
+    parser.add_argument('--n_clusters', type=int, default=0)
 
     args = parser.parse_args()
     print(args)

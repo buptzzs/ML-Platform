@@ -9,9 +9,7 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,10 +52,14 @@ public class SupportVectorMachine extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "False");
+            setParam("train", "True");
             setParam("ratio", "0.2");
             setParam("model_name", "SVM_test");
             setParam("model","");
+            setParam("kernel","rbf");
+            setParam("c", "1.0");
+            setParam("coef0", "0.0");
+
         }
     }
 

@@ -4,6 +4,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import pandas as pd
+
 model = 'svm'
 
 
@@ -19,7 +21,7 @@ def main(args):
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        clf = svm.SVC()
+        clf = svm.SVC(kernel=args.kernel,C=args.C,coef0=args.coef0)
 
         assert 'target' in data
 
@@ -45,12 +47,17 @@ def main(args):
         dump(clf, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model_path)
-        clf = load(args.model)
+        model_path = os.path.join(model_dir,args.model)
+        clf = load(model_path)
         x = data['data']
         pred = clf.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        df = pd.DataFrame({
+            'pred':pred
+        })
+        df.to_csv(out_path)
+        print('save pred to', args.outFileName+'.csv')
+        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -64,6 +71,10 @@ if __name__ == '__main__':
     parser.add_argument('--ratio', type=float, default=0.2)
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
+
+    parser.add_argument('--kernel', type=str, default='rbf')
+    parser.add_argument('--C', type=float, default=1.0)
+    parser.add_argument('--coef0', type=float, default=0.0)
 
 
     args = parser.parse_args()
