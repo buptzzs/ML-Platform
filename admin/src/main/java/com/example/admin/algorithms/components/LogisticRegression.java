@@ -9,9 +9,6 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,6 +53,7 @@ public class LogisticRegression extends AlComponent {
         FileParams() {
             setParam("train", "False");
             setParam("ratio", "0.2");
+            setParam("max_iter","10");
             setParam("model_name", "logistic_test");
             setParam("model","");
         }

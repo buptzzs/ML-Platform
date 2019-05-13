@@ -1,4 +1,4 @@
-<template>
+<template >
     <el-container> 
         <el-main>
             <el-row>
@@ -12,7 +12,7 @@
                 </div>
             </el-row>
             <el-row>
-                <el-col :span="5" v-for="(task, index) in tasks" :key="task.name" :offset="index % 4 == 0 ? 0 : 1">
+                <el-col :span="6" v-for="(task, index) in tasks" :key="task.name" :offset="index % 3 == 0 ? 0 : 1">
                     <el-card>
                         <div slot="header">
                             <span>{{task.taskname}}</span>
@@ -30,14 +30,16 @@
                             <time class="time">运行终止时间: {{task.runTaskInfo.endTime}}</time>
                         </div>
                         <div class="info">
-                            <div class="state" style="color:#F56C6C">状态: {{task.runTaskInfo.taskState}}</div>
+                            <div class="state" :style="state_color(task.runTaskInfo.taskState)">状态: {{task.runTaskInfo.taskState}}</div>
                         </div>                        
                         <el-row class="bottom clearfix">
                             <el-button  type="text" icon="el-icon-info" @click="selectLog(index)">日志</el-button>
-                            <el-button type="text" icon="el-icon-setting"  @click="edit(index)" :disabled="isDisable(index)">
-                            配置</el-button>
-                            <el-button type="text" icon="el-icon-caret-right" @click="run(index)" :disabled="isDisable(index)">运行</el-button>
-                            <el-button type="text" icon="el-icon-delete" @click="deleteUserTask(index)" :disabled="isDisable(index)"></el-button>                            
+                            <el-button type="text" icon="el-icon-setting"  @click="edit(index)" :disabled="isRunning(index)">
+                            编辑</el-button>
+                            <el-button type="text"  v-if="! isRunning(index)" icon="el-icon-caret-right" @click="run(index)" >运行</el-button>
+                            <el-button type="text"  v-else icon="el-icon-circle-close" @click="stop(index)" >终止</el-button>
+
+                            <el-button type="text" icon="el-icon-delete" @click="deleteUserTask(index)" :disabled="isRunning(index)">删除</el-button>                            
                         </el-row>
                     </el-card>
                 </el-col>
@@ -49,10 +51,10 @@
                     <div class="divInfo">{{curLog.success == false ? '失败':'成功'}}</div>
                 </el-collapse-item>
                 <el-collapse-item title="运行信息" name="2">
-                    <div class="divInfo">{{curLog.runLog}}</div>
+                    <div class="divInfo" >{{curLog.runLog}}</div>
                 </el-collapse-item>
                 <el-collapse-item title="错误信息" name="3">
-                    <div class="divInfo">{{curLog.errorLog}}</div>
+                    <div class="divInfo" >{{curLog.errorLog}}</div>
                 </el-collapse-item>
             </el-collapse>
         </el-dialog>
@@ -61,7 +63,7 @@
 </template>
 
 <script>
-import {getTasks, addTask, deleteTask, runTask} from '@/api/userTask'
+import {getTasks, addTask, deleteTask, runTask, stopTask} from '@/api/userTask'
 
 
 export default {
@@ -126,11 +128,21 @@ export default {
                 username: this.$store.getters.name,
                 taskname: this.tasks[index].taskname
             }
-
-            deleteTask(params).then(response => {
-                this.$message("删除任务成功");
-                this.getUserTasks();
-            })
+             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+                                deleteTask(params).then(response => {
+                                    this.$message("删除任务成功");
+                                    this.getUserTasks();
+                                })
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消删除'
+                                });          
+            });    
 
         },
 
@@ -148,20 +160,56 @@ export default {
                 taskname: this.tasks[index].taskname
             }
 
-
-
-
             runTask(params).then(response => {
                 this.$message("任务提交完毕");
                 this.getUserTasks();
             })
         },
 
-        isDisable(index) {
+        stop(index){
+                this.$confirm('终止任务?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+                        const params = {
+                            username: this.$store.getters.name,
+                            taskname: this.tasks[index].taskname
+                        }
+
+                        stopTask(params).then(response => {
+                            this.$message("任务终止");
+                            this.getUserTasks();
+                        })   
+
+                    }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });          
+                });                                 
+        },
+
+        isRunning(index) {
             const state = this.tasks[index].runTaskInfo.taskState
             const flag = (state == "RUNNING")
             return flag
-        }
+        },      
+
+        state_color(state){
+            if(state=='SUCCESS'){
+                return 'color:#67C23A'
+            }
+            else if(state == "RUNNING"){
+                return 'color:#E6A23C'
+            }
+            else if(state == "FAILED"){
+                return 'color:#F56C6C'
+            }else{
+                return 'color:#909399'
+
+            }
+        },
     }
 }
 </script>
@@ -169,7 +217,7 @@ export default {
 <style>
     .time {
         font-size: 13px;
-        color: #999;
+        color: #303133;
     }
 
     .state {
@@ -199,4 +247,6 @@ export default {
     .divInfo {
         white-space: pre-line;
     }
+
+ 
 </style>

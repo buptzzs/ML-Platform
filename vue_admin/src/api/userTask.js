@@ -50,3 +50,11 @@ export function runTask(params){
         params
     })
 }
+
+export function stopTask(params) {
+    return request({
+        url: '/alComponent/stopTask',
+        method: 'post',
+        params
+    })
+}

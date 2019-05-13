@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -81,7 +83,11 @@ public class FileServiceImpl implements FileService {
         Path path = local_path(username, type);
         try {
             long size = Files.size(path.resolve(filename));
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            long time = Files.getLastModifiedTime(path.resolve(filename)).toMillis();
+            String date = dateFormat.format(time);
             FileInfo fileInfo = new FileInfo();
+            fileInfo.setTime(date);
             fileInfo.setName(filename);
             fileInfo.setSize(size);
             return fileInfo;

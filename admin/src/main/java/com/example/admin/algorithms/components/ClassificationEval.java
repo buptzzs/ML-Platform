@@ -9,23 +9,19 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
+import lombok.extern.slf4j.Slf4j;
 
-public class FileComponent extends AlComponent {
+@Slf4j
+public class ClassificationEval extends AlComponent {
 
-    private static String pyFile = "fileConvert.py";
+    private static String pyFile = "classification_metrics.py";
 
-    
     private RunUtil runUtil = new RunUtil();
 
-    public FileComponent() {
+    public ClassificationEval() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "FileComponent";
-    }
-
-    @Override
-    public String out_postfix() {
-        return params.getParam("outType");
+        name = "ClassificationEval";
     }
 
     @Override
@@ -33,6 +29,11 @@ public class FileComponent extends AlComponent {
         List<String> sParams = new ArrayList<String>();
         for (String key : params.getParams().keySet()) {
             String value = params.getParam(key);
+            if (value.length() == 0) {
+                continue;
+            }
+            log.info(key);
+            log.info(value);
             sParams.add("--" + key);
             sParams.add(value);
         }
@@ -43,15 +44,12 @@ public class FileComponent extends AlComponent {
         sParams.add("--root");
         sParams.add(root);
         RunResult result = runUtil.runPython(pyFile, sParams);
-        return result;        
+        return result;
 
     }
 
-
     private class FileParams extends Params {
         FileParams() {
-            setParam("inType", "csv");
-            setParam("outType", "json");
         }
     }
 

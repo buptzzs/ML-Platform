@@ -3,48 +3,6 @@ import G6Editor from '@antv/g6-editor'
 
 const Flow = G6Editor.Flow;
 
-Flow.registerNode('factory-card', {
-    draw(item) {
-        const group = item.getGraphicGroup();
-        const model = item.getModel();
-        const width = 100;
-        const height = 100;
-        const x = -width / 2;
-        const y = -height / 2;
-        const keyShape = group.addShape('image', {
-            attrs: {
-                x,
-                y,
-                width,
-                height,
-                img: factory
-            }
-        });
-        if (model.label) {
-            group.addShape('text', {
-                attrs: {
-                    text: model.label,
-                    x: 0,
-                    y: y - 20,
-                    textAlign: 'center',
-                    textBaseline: 'top',
-                    fill: model.color ? model.color : 'rgba(0,0,0,0.65)'
-                }
-            });
-        }
-        return keyShape;
-    },
-    // 设置锚点
-    anchor: [
-        [ 1, 0.5, {
-            type: 'output'
-        } ], // 上面边的中点
-        [ 0, 0.5, {
-            type: 'input'
-        } ] // 下边边的中点
-    ]
-});
-
 // 注册模型卡片基类
 Flow.registerNode('model-card', {
     draw(item) {
@@ -154,6 +112,29 @@ Flow.registerNode('k-means', {
     ]
 }, 'model-card');
 
+Flow.registerNode('Play', {
+    label: 'Play',
+    color_type: '#1890FF',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 0, {
+            type: 'input'
+        }], // 上面边的中点
+        [0.5, 1, {
+            type: 'output'
+        }] // 下边边的中点
+    ],
+    params: [
+        {
+            name: 'time',
+            value: '60',
+            type: 'str'
+        },
+    ]
+}, 'model-card');
+
 // 随机森林
 Flow.registerNode('random-forest', {
     label: '随机森林',
@@ -240,17 +221,22 @@ Flow.registerNode('FileComponent', {
     anchor: [
         [ 0.5, 1, {
             type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
         }]
     ],
     params: [
         {
             name: 'inType',
             value: 'csv',
-            type:'str'
+            options: ['csv','json','txt'],
+            type:'option'
         }, {
             name: 'outType',
             value: 'json',
-            type:'str'
+            options: ['csv', 'json', 'txt'],
+            type:'option'
         },
 
     ]
@@ -330,6 +316,9 @@ Flow.registerNode('LinearRegression', {
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
     // 设置锚点
     anchor: [
+        [0.5, 0, {
+            type: 'input'
+        }],
         [0.5, 1, {
             type: 'output'
         }]
@@ -391,6 +380,22 @@ Flow.registerNode('DecisionTree', {
     ]
 }, 'model-card');
 
+Flow.registerNode('ClassificationEval', {
+    label: '分类评估',
+    color_type: '#1C1C1C',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 0, {
+            type: 'input'
+        }],
+
+    ],
+    params: [
+    ]
+}, 'model-card');
+
 Flow.registerNode('LogisticRegression', {
     label: '逻辑回归',
     color_type: '#FFFF00',
@@ -400,7 +405,10 @@ Flow.registerNode('LogisticRegression', {
     anchor: [
         [0.5, 1, {
             type: 'output'
-        }]
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]        
     ],
     params: [
         {
@@ -411,7 +419,12 @@ Flow.registerNode('LogisticRegression', {
             name: 'ratio',
             value: '0.2',
             type: 'str'
-        }, {
+        },{
+            name: 'max_iter',
+            value: '10',
+            type: 'str'
+        }, 
+        {
             name: 'model_name',
             value: 'logistic_regression_test',
             type:'str'
@@ -424,6 +437,101 @@ Flow.registerNode('LogisticRegression', {
 
     ]
 }, 'model-card');
+
+Flow.registerNode('Impute', {
+    label: '缺失值填充',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'strategy',
+            value: 'mean',
+            options: ['mean', '0','bfill', 'ffill'],
+            type: 'option'
+        }, 
+    ]
+}, 'model-card');
+
+Flow.registerNode('Normalize', {
+    label: '特征正则化',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'norm',
+            value: 'l2',
+            options: ['l2', 'l1', 'max'],
+            type: 'option'
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('DatasetGenerate', {
+    label: '数据集生成',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'label_col',
+            value: 'label',
+            type: 'str'
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('DeleteColumn', {
+    label: '列删除',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'col',
+            value: '',
+            type: 'str'
+        },
+    ]
+}, 'model-card');
+
 
 Flow.registerNode('KNearestNeighbor', {
     label: 'K最近邻',
@@ -458,134 +566,11 @@ Flow.registerNode('KNearestNeighbor', {
 
     ]
 }, 'model-card');
-// const MIN_ARROW_SIZE = 3;
-// Flow.registerEdge('line', {
-//     draw(item) {
-//         const group = item.getGraphicGroup();
-//         const path = this.getPath(item);
 
-//         let aaa = group.addShape('path', {
-//             attrs: {
-//                 path,
-//                 stroke: 'black',
-//                 lineWidth: 1,
-//                 endArrow: true,
-//                 lineDash: [20, 10]
-//             }
-//         });
-
-//         console.log(aaa);
-//         return aaa;
-//     },
-//     getPath(item) {
-//         const points = item.getPoints();
-//         let point1 = points[0];
-//         let point2 = points[1];
-//         const lightningWidth = 20;
-//         let newPoints = [point1, {
-//             x: (point1.x + point2.x) / 2,
-//             y: ((point1.y + point2.y) / 2 + lightningWidth)
-//         }, {
-//             x: (point1.x + point2.x) / 2 + lightningWidth,
-//             y: ((point1.y + point2.y) / 2 - lightningWidth)
-//         }, point2];
-//         return G6Editor.Util.pointsToPolygon(newPoints);
-//     },
-//     endArrow: {
-//         path(item) {
-//             const keyShape = item.getKeyShape();
-//             let lineWidth = keyShape.attr('lineWidth');
-//             lineWidth = lineWidth > MIN_ARROW_SIZE ? lineWidth : MIN_ARROW_SIZE;
-//             const width = lineWidth * 10 / 3;
-//             const halfHeight = lineWidth * 4 / 3;
-//             const radius = lineWidth * 4;
-//             return [
-//                 [ 'M', -width, halfHeight ],
-//                 [ 'L', 0, 0 ],
-//                 [ 'L', -width, -halfHeight ],
-//                 [ 'A', radius, radius, 0, 0, 1, -width, halfHeight ],
-//                 [ 'Z' ]
-//             ];
-//         },
-//         shorten(item) {
-//             const keyShape = item.getKeyShape();
-//             const lineWidth = keyShape.attr('lineWidth');
-//             return (lineWidth > MIN_ARROW_SIZE ? lineWidth : MIN_ARROW_SIZE) * 3.1;
-//         },
-//         style(item) {
-//             const keyShape = item.getKeyShape();
-//             const { strokeOpacity, stroke } = keyShape.attr();
-//             return {
-//                 fillOpacity: strokeOpacity,
-//                 fill: stroke
-//             };
-//         }
-//     }
-// });
-
-// Flow.registerEdge('line', {
-//     draw(item) {
-//         const group = item.getGraphicGroup();
-//         const path = this.getPath(item);
-
-//         let aaa = group.addShape('path', {
-//             attrs: {
-//                 path,
-//                 stroke: 'black',
-//                 lineWidth: 1,
-//                 endArrow: false,
-//                 fillStyle: ''
-//             }
-//         });
-
-//         console.log(aaa);
-//         return aaa;
-//     },
-//     getPath(item) {
-//         const points = item.getPoints();
-//         let point1 = points[0];
-//         let point2 = points[1];
-//         let strokeWidth = 10;
-//         let arrowWidth = 30;
-//         let arrowHeigh = 30;
-//         let newPoints = [{
-//             x: point1.x,
-//             y: point1.y - strokeWidth / 2
-//         }, {
-//             x: point2.x - arrowWidth,
-//             y: point2.y - strokeWidth / 2
-//         }, {
-//             x: point2.x - arrowWidth,
-//             y: point2.y - arrowHeigh / 2
-//         }, {
-//             x: point2.x,
-//             y: point2.y
-//         }, {
-//             x: point2.x - arrowWidth,
-//             y: point2.y + arrowHeigh / 2
-//         }, {
-//             x: point2.x - arrowWidth,
-//             y: point2.y + strokeWidth / 2
-//         }, {
-//             x: point1.x,
-//             y: point1.y + strokeWidth / 2
-//         },
-//         {
-//             x: point1.x,
-//             y: point1.y - strokeWidth / 2
-//         }];
-//         return G6Editor.Util.pointsToPolygon(newPoints);
-//     }
-// });
-
-// const MIN_ARROW_SIZE = 3;
 Flow.registerEdge('line', {
     draw(item) {
         const group = item.getGraphicGroup();
         const path = this.getPath(item);
-
-        // const width = 20;
-
         let aaa = group.addShape('path', {
             attrs: {
                 path,
@@ -595,22 +580,6 @@ Flow.registerEdge('line', {
                 lineDash: [10, 10]
             }
         });
-        // const points = item.getPoints();
-        // const point1 = points[0];
-        // const point2 = points[1];
-        // const shorten = (width > MIN_ARROW_SIZE ? width : MIN_ARROW_SIZE) * 3.1;
-        // group.addShape('path', {
-        //     attrs: {
-        //         path: G6Editor.Util.pointsToPolygon([
-        //             {x: point1.x, y: point1.y + width / 2},
-        //             {x: point1.x, y: point1.y - width / 2},
-        //             {x: point2.x - shorten, y: point2.y - width / 2},
-        //             {x: point2.x - shorten, y: point2.y + width / 2},
-        //             {x: point1.x, y: point1.y + width / 2}]),
-        //         stroke: 'black',
-        //         lineWidth: 1
-        //     }
-        // });
 
         return aaa;
     },
@@ -626,34 +595,4 @@ Flow.registerEdge('line', {
             repeat: true
         }, 500);
     }
-    // ,
-    // endArrow: {
-    //     path(item) {
-    //         const keyShape = item.getKeyShape();
-    //         let lineWidth = keyShape.attr('lineWidth');
-    //         lineWidth = lineWidth > MIN_ARROW_SIZE ? lineWidth : MIN_ARROW_SIZE;
-    //         const width = lineWidth * 10 / 3;
-    //         const halfHeight = lineWidth * 4 / 3;
-    //         return [
-    //             [ 'M', -width, halfHeight ],
-    //             [ 'L', 0, 0 ],
-    //             [ 'L', -width, -halfHeight ],
-    //             [ 'L', -width, halfHeight ],
-    //             [ 'Z' ]
-    //         ];
-    //     },
-    //     shorten(item) {
-    //         const keyShape = item.getKeyShape();
-    //         const lineWidth = keyShape.attr('lineWidth');
-    //         return (lineWidth > MIN_ARROW_SIZE ? lineWidth : MIN_ARROW_SIZE) * 3.1;
-    //     },
-    //     style(item) {
-    //         const keyShape = item.getKeyShape();
-    //         const { strokeOpacity, stroke } = keyShape.attr();
-    //         return {
-    //             fillOpacity: strokeOpacity,
-    //             fill: stroke
-    //         };
-    //     }
-    // }
 });

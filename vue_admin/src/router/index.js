@@ -39,7 +39,7 @@ export const constantRouterMap = [
   {
     path: '/resourceManage',
     component: Layout,
-    meta: { title: '资源管理', icon: 'manage' },
+    meta: { title: '文件管理', icon: 'manage' },
     redirect: '/resourceManage/data',
     children: [
       {

@@ -7,78 +7,24 @@
         <div class="bottom-container">
             <context-menu />
             <div id="itempannel">
-                <ul>
-                    <li
-                        class="getItem"
-                        data-shape="k-means"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>K均值聚类
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="random-forest"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>随机森林
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="FileComponent"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>数据格式转换
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="LinearRegression"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>线性回归
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="Bayes"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>朴素贝叶斯
-                    </li>    
-                    <li
-                        class="getItem"
-                        data-shape="SupportVectorMachine"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>支持向量机
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="SupportVectorRegression"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>支持向量回归
-                    </li>  
-                    <li
-                        class="getItem"
-                        data-shape="DecisionTree"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>决策树
-                    </li>               
-                    <li
-                        class="getItem"
-                        data-shape="LogisticRegression"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>逻辑回归
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="KNearestNeighbor"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>K最近邻
-                    </li>
-                </ul>
+                    <el-tree
+                    :data="tree_data"
+                    node-key="type"
+                    :default-expanded-keys="['DataPreprocess']"
+                    :expand-on-click-node="false">
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <span v-if="!node.isLeaf">{{ node.label }}</span>
+                        <span>
+                            <li v-if="node.isLeaf"
+                                class="getItem"
+                                :data-shape="data.type"
+                                data-type="node"
+                                data-size="170*34">
+                                <span class="pannel-type-icon"/>{{data.label}}
+                            </li>   
+                        </span>
+                    </span>
+                    </el-tree>
             </div>
             <div id="detailpannel">
                 <div
@@ -89,24 +35,6 @@
                     </div>
                     <div class="block-container">
                         <div v-if="selectedModel && selectedModel.type === 'node'" >
-                            <div v-if="selectedModel.shape === 'factory-card'">
-                                <el-form
-                                    label-width="80px"
-                                    label-position="left">
-                                    <el-form-item
-                                        label="名称："
-                                        prop="label">
-                                        <el-input v-model="inputingLabel"/>
-                                    </el-form-item>
-                                    <el-form-item
-                                        label="字体颜色："
-                                        prop="color">
-                                        <el-color-picker
-                                            v-model="color"
-                                            size="mini"/>
-                                    </el-form-item>
-                                </el-form>
-                            </div>
                             <div >
                                 <el-form label-width="100px">
                                     <el-form-item
@@ -131,23 +59,24 @@
                                                 </el-option>
                                             </el-select>
                                         </div>
+                                        <div v-else-if="param.type=='option'">
+                                            <el-select v-model="param.value" placeholder="请选择">
+                                                <el-option
+                                                    v-for="option in param.options"
+                                                    :key="option"
+                                                    :label="option"
+                                                    :value="option"
+                                                >
+                                                </el-option>
+                                            </el-select>
+                                        </div>                                        
                                         <div v-else>
                                             <el-input v-model="param.value"/>
                                         </div>                                        
-
                                     </el-form-item>
                                 </el-form>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div
-                    id="node_detailpannel"
-                    data-status="group-selected"
-                    class="pannel">
-                    <div class="pannel-title">群组详情</div>
-                    <div class="block-container">
-                        <el-input v-model="inputingLabel"/>
                     </div>
                 </div>
                 <div
@@ -196,8 +125,106 @@ export default {
             tempColor: '',
             tempParams: null,
             data : {},
-            model_files:[]
-        };
+            model_files:[],
+            tree_data: [
+                {
+                    label: '数据预处理',
+                    type:'DataPreprocess',
+                    children: [
+                        {
+                            label: '数据格式转换',
+                            type:'FileComponent',
+                            isLeaf: true
+                        },
+                       {
+                            label: '缺失值填充',
+                            type:'Impute',
+                            isLeaf: true
+                        },{
+                            label: '列删除',
+                            type:'DeleteColumn',
+                            isLeaf: true                            
+                        },{
+                            label: '数据集生成',
+                            type:'DatasetGenerate',
+                            isLeaf: true                                
+                        },{
+                            label: '特征正则化',
+                            type:'Normalize',
+                            isLeaf: true                                
+                        },
+                        {
+                            label: 'Play',
+                            type:'Play',
+                            isLeaf: true                                
+                        }
+                    ]
+                }, {
+                    label: '分类算法',
+                    type: 'Classification',
+                    children:[
+                        {
+                            label:'逻辑回归',
+                            type:'LogisticRegression',
+                            isLeaf:true
+                        },
+                        {
+                            label:'支持向量机',
+                            type:'SupportVectorMachine',
+                            isLeaf:true                            
+                        },{
+                            label:'朴素贝叶斯',
+                            type:'Bayes',
+                            isLeaf:true                               
+                        },{
+                            label:'随机深林',
+                            type:'random-forest',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'K最近邻',
+                            type:'KNearestNeighbor',
+                            isLeaf:true
+                        }                        
+                    ]
+                }, {
+                    label: '聚类算法',
+                    type:'Cluster',
+                    children:[
+                        {
+                            label:'k均值聚类',
+                            type:'k-means',
+                            isLeaf:true
+                        }
+                    ]
+                },{
+                    label:'回归算法',
+                    type:'Regression',
+                    children:[
+                        {
+                            label:'支持向量机回归',
+                            type:'SupportVectorRegression',
+                            isLeaf:true                            
+                        },
+                        {
+                            label:'决策树',
+                            type:'DecisionTree',
+                            isLeaf:true                            
+                        }                        
+                    ]                    
+                },{
+                    label: '评估',
+                    type:'Estimate',
+                    children:[
+                        {
+                            label:'分类结果评估',
+                            type:'ClassificationEval',
+                            isLeaf:true                            
+                        }
+                    ]                    
+                }
+                ]            
+            };
     },
     computed: {
         inputingLabel: {
@@ -318,6 +345,7 @@ export default {
 };
 </script>
 <style lang="scss">
+
 #itempannel{
   height: 100%;
   position: absolute;
@@ -329,16 +357,7 @@ export default {
   border-right: 1px solid #E6E9ED;
   text-align: left;
 }
-#itempannel ul{
-  padding: 0px;
-  padding-left: 16px;
-}
-#itempannel .el-menu-vertical-demo{
-  height: 50%;
-  padding: 10px;
-  padding-left: 16px;
-  display: inline-block;
-}
+
 #itempannel li{
   color: rgba(0,0,0,0.65);
   border-radius: 4px;
@@ -349,6 +368,7 @@ export default {
   border: 1px solid rgba(0,0,0,0);
   list-style-type: none;
 }
+
 #itempannel .pannel-type-icon{
   width: 16px;
   height: 16px;
@@ -357,11 +377,13 @@ export default {
   margin-right: 8px;
   background: url(https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg)
 }
+
 #itempannel li:hover{
   background: white;
   border: 1px solid #CED4D9;
   cursor: move;
 }
+
 #detailpannel{
   height: 100%;
   position: absolute;

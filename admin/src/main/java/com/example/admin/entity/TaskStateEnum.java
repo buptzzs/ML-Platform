@@ -5,7 +5,7 @@ import lombok.Getter;
  * 任务状态枚举类
  */
 public enum TaskStateEnum {
-    
+    CREATED(3, "任务创建"),
     STARTED(1, "任务已经启动"),
     RUNNING(0, "任务正在运行"),
     SUCCESS(2, "任务执行成功"),

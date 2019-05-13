@@ -36,6 +36,8 @@ public class ComponentTask implements AsyncTaskConstructor {
      */
     @Override
     public void async(String taskRoot, String taskname) {
+        Thread t = Thread.currentThread();
+        log.info("task name{}, taskID{}", t.getName(),t.getId());
 
         log.info("运行组件数:" + components.size());
         log.info("task root:{}, taskname:{}", taskRoot, taskname);
@@ -44,8 +46,14 @@ public class ComponentTask implements AsyncTaskConstructor {
         String cur_end = "";
         String errorInfo = "\n";
 
-        String runLog = "运行组件数:" + components.size();
+        ArrayList<String> runLog = new ArrayList<String>();
         String errorLog = "";
+        String post_fix = "";
+        //init 
+        RunResult initResult = new RunResult();
+        initResult.setTotal(components.size());
+
+        service.updateRunResult(taskRoot, taskname, initResult);
 
         for (int i = 0; i < components.size(); i++) {
             AlComponent component = components.get(i);
@@ -61,13 +69,17 @@ public class ComponentTask implements AsyncTaskConstructor {
                 cur_end = "mid_" + component.name;
             }
 
-            runLog = runLog + "component:" + component.name + "\n";
+            String curRunLog ="Runinng component:" + component.name + "\n";
             errorLog = errorLog + "component:" + component.name + "\n";
 
             log.info("running component:" + component.name);
-            RunResult result = component.run(userRoot, cur_begin, cur_end);
 
-            runLog = runLog + result.getRunLog() + "\n";
+            RunResult result = component.run(userRoot, cur_begin+post_fix, cur_end);
+            post_fix = "." + component.out_postfix();
+
+            curRunLog = curRunLog + result.getRunLog().get(0) + "\n";
+            runLog.add(curRunLog);
+
             errorLog = errorLog + result.getErrorLog() + "\n";
             
             result.setRunLog(runLog);

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Future;
 
 import com.example.admin.entity.RunTaskInfo;
 import com.example.admin.entity.TaskStateEnum;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class AsyncTaskManager {
     private Map<String, RunTaskInfo> taskContainer = new HashMap<>(16);
+    private Map<String, Future<String>> taskWorkerContainer = new HashMap<>(16);
     
     @Autowired
     AsyncTaskExecutor asyncTaskExecutor;
@@ -42,8 +44,17 @@ public class AsyncTaskManager {
         String taskId = info.getTaskId();
         log.info("submit: task root:{}, taskname:{}", taskRoot, taskname);
 
-        asyncTaskExecutor.executor(asyncTaskConstructor, taskId, taskRoot, taskname);
+        Future<String> future =  asyncTaskExecutor.executor(asyncTaskConstructor, taskId, taskRoot, taskname);
+        this.setRunTaskWorker(info, future);
         return info;
+    }
+
+    public boolean stopTask(String taskId){
+        Future<String> future = this.taskWorkerContainer.get(taskId);
+        if(future != null){
+            return future.cancel(true);
+        }
+        return false;
     }
 
     /**
@@ -57,6 +68,15 @@ public class AsyncTaskManager {
 
     public void setRunTaskInfo(RunTaskInfo RunTaskInfo) {
         taskContainer.put(RunTaskInfo.getTaskId(), RunTaskInfo);
+    }
+
+    public void setRunTaskWorker(RunTaskInfo runTaskInfo, Future<String> worker){
+        this.taskWorkerContainer.put(runTaskInfo.getTaskId(), worker);
+    }
+
+    public Future<String> getTaskWorker(String taskId){
+        Future<String> worker = this.taskWorkerContainer.get(taskId);
+        return worker;
     }
 
     /**

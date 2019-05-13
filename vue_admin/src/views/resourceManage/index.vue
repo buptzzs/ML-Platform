@@ -66,7 +66,11 @@ export default {
             }, {
                 prop: 'size',
                 label: '文件大小/bytes'
-            }];
+            },{
+                prop:'time',
+                label: '上次修改时间'
+            }
+            ];
 
         return {
             //tableData: []
@@ -86,24 +90,43 @@ export default {
                 }
             ],
             actionCol: {
-                label: 'Actions',
-                probs: {
-                    align: 'left',
+                label: '操作',
+                props: {
+                    align: 'center',
                 },
                 buttons: [{
                     props: {
-                        type: 'primary',
+                        //type: 'primary',
                         icon: 'el-icon-download'
                     },
                     handler: row => {
                         this.download_file(row.name)
-                },
-                    label: 'download' 
-                }, {
-                    handler: row  => {
-                        this.delete(row.name)
                     },
-                    label: 'delete'
+                    label: '下载' 
+                }, {
+                    props: {
+                        //type: 'primary',
+                        icon: 'el-icon-delete'
+                    },
+                    handler: row  => {
+                        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+                                this.delete(row.name)
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消删除'
+                                });          
+                                });                        
+                    },
+                    label: '删除'
                 }
                 ]
             },
@@ -129,11 +152,15 @@ export default {
             const index = filename.lastIndexOf(".")
             const ext = filename.substr(index+1)
             const isSupportType = ext == 'json' || ext == 'txt' || ext == 'csv'
-
+            /** 
             if (!isSupportType) {
                 this.$message.error('上传文件只能是json、txt、csv格式')
             }
+            
             return isSupportType
+            */
+            return true;
+            
         },
 
         fetchData() {

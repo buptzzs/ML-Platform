@@ -117,6 +117,19 @@ export default {
                     this.$message.info("保存至新任务"+this.new_taskname);
                     this.$emit('save',this.new_taskname, this.curBeginFile, this.curEndFile);
                 }
+                this.$confirm('回到任务管理界面?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+                                    this.$message("跳转成功");
+                                    this.$router.push({path:'/taskManage/index'});
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '继续编辑'
+                                });          
+                    });                 
             }
         }
 
