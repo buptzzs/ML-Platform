@@ -25,8 +25,7 @@
     <el-tab-pane label="任务信息">
         <el-table :data="tasks"
         :default-sort = "{prop: 'taskname', order: 'descending'}"
-          max-height="400"
-        :row-class-name="tableRowClassName" 
+          max-height="350"
         >
           <el-table-column prop="taskname" label="任务名" align="center" sortable></el-table-column>  
           <el-table-column prop="taskID" label="任务ID" align="center" sortable></el-table-column>  
@@ -71,8 +70,9 @@ export default {
   },
 
   created() {
-    this.fetchData('data')
-    this.fetchModel('model')
+    this.fetchData()
+    this.fetchModel()
+    this.fetchMetrics()
     this.getUserTasks()
   },
   
@@ -109,6 +109,22 @@ export default {
               }
             })
         },
+        fetchMetrics() {
+            const params = {
+                username: this.$store.getters.name,
+                type: 'metrics'
+            }
+            getFileInfos(params).then(response =>{
+              const models = response.data
+              for(let i = 0; i< models.length;i++){
+                let file_info = {}
+                file_info['name'] = models[i].name
+                file_info['time'] = models[i].time
+                file_info['type'] = '评估结果文件'
+                this.all_files.push(file_info)  
+              }
+            })
+        },        
         getUserTasks() {
             const params = {
                 username: this.$store.getters.name,
@@ -151,7 +167,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dashboard {
   &-container {
-    margin: 100px;
+    margin: 20px;
   }
   &-text {
     font-size: 30px;
@@ -171,5 +187,7 @@ export default {
     text-align: center;
     line-height: 20px;
   }
+
+
   
 </style>

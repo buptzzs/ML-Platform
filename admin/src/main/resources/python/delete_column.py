@@ -18,19 +18,23 @@ def main(args):
     elif data_path.endswith('.json'):
         df = pd.read_json(data_path)
     else:
-        raise "不支持的文件类型，仅支持csv,json"
+        raise "unsuport type! please use csv,json"
 
     cols = list(df.columns)
 
-    if args.col not in cols:
-        print(f'列{args.col},不存在，操作被忽略')
-    else:
-        print("删除前")
-        print(df.head())
-        print(f'删除列:{args.col}')
-        print("删除后:")
-        df = df.drop(args.col, axis=1)
-        print(df.head())
+    del_cols = args.col
+    del_cols = set([col.strip() for col in args.col.split(',')])
+
+    for col in del_cols:
+        if col not in cols:
+            print(f'column {args.col} not exist, this operation will be ignored')
+        else:
+            print(u"before delete")
+            print(df.head())
+            print(f'delete:{col}')
+            print("after delete:")
+            df = df.drop(col, axis=1)
+            print(df.head())
 
     df.to_json(out_path+'.json', orient="records")
 

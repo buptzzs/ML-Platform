@@ -12,16 +12,16 @@ import com.example.admin.service.RunUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ClassificationEval extends AlComponent {
+public class BiClassificationEval extends AlComponent {
 
-    private static String pyFile = "classification_metrics.py";
+    private static String pyFile = "bi_classification_metrics.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public ClassificationEval() {
+    public BiClassificationEval() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "ClassificationEval";
+        name = "BiClassificationEval";
     }
 
     @Override
@@ -50,6 +50,9 @@ public class ClassificationEval extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
+            setParam("f1", "true");
+            setParam("accuracy", "true");
+            setParam("curve", "roc");
             setParam("txt_report", "true");
 
         }

@@ -50,11 +50,12 @@ def main(args):
         # The coefficients
         print('Coefficients: \n', clf.coef_)
         # The mean squared error
-
+        y_prob = clf.predict_proba(x_test)
 
         df = pd.DataFrame({
             'pred': y_pred,
-            'target': y_test
+            'target': y_test,
+            'prob': y_prob[:,1] # 这里有待商榷
         })
         print(f'validation results save to:{args.outFileName}.csv')
         df.to_csv(out_path)

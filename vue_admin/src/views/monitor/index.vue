@@ -7,15 +7,15 @@
             <el-row>
                 <el-col :span="8">
                       <h2>CPU</h2>
-                      <ve-pie :data="cpuChartData" :settings="chartSettings"></ve-pie>
+                      <ve-line :data="cpuChartData" :settings="chartSettings"></ve-line>
                 </el-col >
                 <el-col  :span="8">
                     <h2>内存</h2>
-                      <ve-pie :data="memChartData" :settings="chartSettings"></ve-pie>
+                      <ve-line :data="memChartData" :settings="chartSettings"></ve-line>
                 </el-col>
                 <el-col :span="8">
                      <h2>磁盘</h2>
-                      <ve-pie :data="diskChartData" :settings="chartSettings"></ve-pie>
+                      <ve-line :data="diskChartData" :settings="chartSettings"></ve-line>
                 </el-col>                                
             </el-row>
             
@@ -31,32 +31,28 @@ export default {
 
     data() {
         this.chartSettings = {
-            dataType: 'normal'
+            xAxisType: 'category'
         }
         return {
             systemInfo : {},
             cpuChartData: {
                 label:'CPU',
-                columns: ['状态', '百分比' ],
+                columns: ['时间','百分比' ],
                 rows: [
-                    { '状态': '占用', '百分比': 0 },
-                    { '状态': '空闲', '百分比': 1 },
+
                 ]
             },
             memChartData: {
                 label:'CPU',
-                columns: ['状态', '百分比' ],
+                columns: ['时间','百分比' ],
                 rows: [
-                    { '状态': '占用', '百分比':  0},
-                    { '状态': '空闲', '百分比': 1 },
                 ]
             },
             diskChartData: {
                 label:'CPU',
-                columns: ['状态', '百分比' ],
+                columns: ['时间','百分比' ],
                 rows: [
-                    { '状态': '占用', '百分比': 0 },
-                    { '状态': '空闲', '百分比': 1 },
+
                 ]
             }            
         }
@@ -64,23 +60,49 @@ export default {
     created() {
         this.getSystemInfo()
     },    
+
+    mounted(){
+        if(this.timer){      
+                clearInterval(this.timer)    
+        }else{      
+            this.timer = setInterval(()=>{       
+            // 调用相应的接口，渲染数据        
+            this.getSystemInfo()     
+            console.log("get user task")
+            },3000)    
+        }  
+    },
+
+    destroyed(){    
+        clearInterval(this.timer)  
+    }, 
+
+
     methods:{
         
         getSystemInfo(){
             const params = {
             }
             getSystemInfo(params).then(response =>{
+                var d = new Date()
                 var systemInfo = response.data
                 this.systemInfo = JSON.parse(systemInfo.trim())
-                this.cpuChartData['rows'][0]['百分比'] = this.systemInfo['cpu']
-                this.cpuChartData['rows'][1]['百分比'] = 100 - this.systemInfo['cpu']
-                var mem_total = this.systemInfo['mem_total']
-                this.memChartData['rows'][0]['百分比'] = mem_total*(this.systemInfo['mem_percent']) / 100
-                this.memChartData['rows'][1]['百分比'] = mem_total*(100 - this.systemInfo['mem_percent']) / 100
+                var cpu_item = {}
+                cpu_item['时间'] = d.toLocaleTimeString();
+                cpu_item['百分比'] = this.systemInfo['cpu']
+                this.cpuChartData['rows'].push(cpu_item)
+
+                var mem_item = {}
+                mem_item['时间'] = d.toLocaleTimeString();
+                mem_item['百分比'] = this.systemInfo['mem_percent']
+                this.memChartData['rows'].push(mem_item)
+
+                var disk_item = {}
+                disk_item['时间'] = d.toLocaleTimeString();
+                disk_item['百分比'] = this.systemInfo['disk_percent']
+                this.diskChartData['rows'].push(disk_item)
+                console.log(disk_item)
                 
-                var disk_total = this.systemInfo['disk_total']
-                this.diskChartData['rows'][0]['百分比'] = disk_total * this.systemInfo['disk_percent'] / 100
-                this.diskChartData['rows'][1]['百分比'] = disk_total*(100 - this.systemInfo['disk_percent']) / 100
             })
         }
     }

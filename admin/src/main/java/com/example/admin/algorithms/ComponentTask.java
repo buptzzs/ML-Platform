@@ -8,6 +8,8 @@ import com.example.admin.entity.RunTaskInfo;
 import com.example.admin.entity.UserTaskInfo;
 import com.example.admin.service.AlComponentService;
 import com.example.admin.service.AsyncTaskConstructor;
+import com.example.admin.service.FileService;
+import com.example.admin.service.impl.FileServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +31,7 @@ public class ComponentTask implements AsyncTaskConstructor {
 
     AlComponentService service;
 
+    FileServiceImpl filerService;
 
 
     /**
@@ -51,7 +54,13 @@ public class ComponentTask implements AsyncTaskConstructor {
         String post_fix = "";
         //init 
         RunResult initResult = new RunResult();
-        initResult.setTotal(components.size());
+        filerService = new FileServiceImpl();
+        ArrayList<String> total = new ArrayList<String>();
+        for (int i = 0; i < components.size(); i++){
+            total.add(components.get(i).name);
+            log.info(total.get(i));
+        }
+        initResult.setTotal(total);
 
         service.updateRunResult(taskRoot, taskname, initResult);
 
@@ -74,7 +83,8 @@ public class ComponentTask implements AsyncTaskConstructor {
 
             log.info("running component:" + component.name);
 
-            RunResult result = component.run(userRoot, cur_begin+post_fix, cur_end);
+            cur_begin = cur_begin+post_fix;
+            RunResult result = component.run(userRoot, cur_begin, cur_end);
             post_fix = "." + component.out_postfix();
 
             curRunLog = curRunLog + result.getRunLog().get(0) + "\n";
@@ -82,10 +92,15 @@ public class ComponentTask implements AsyncTaskConstructor {
 
             errorLog = errorLog + result.getErrorLog() + "\n";
             
-            result.setRunLog(runLog);
-            result.setErrorLog(errorLog);
+            initResult.setRunLog(runLog);
+            initResult.setErrorLog(errorLog);
+            initResult.setSuccess(result.getSuccess());
             
-            service.updateRunResult(taskRoot, taskname, result);
+            service.updateRunResult(taskRoot, taskname, initResult);
+            if(i != 0){
+                log.info("{}",userRoot);
+                filerService.delete_abs(userRoot, "data", cur_begin);
+            }
 
             if (!result.getSuccess()) {
                 errorInfo = component.name + ": fail";

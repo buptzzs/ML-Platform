@@ -31,7 +31,11 @@
                         </div>
                         <div class="info">
                             <div class="state" :style="state_color(task.runTaskInfo.taskState)">状态: {{task.runTaskInfo.taskState}}</div>
-                        </div>                        
+                        </div>         
+                        <div>
+                            <el-progress :percentage="task.runResult.percentage" status="" color="rgba(142, 113, 199, 0.7)"></el-progress>
+
+                        </div>               
                         <el-row class="bottom clearfix">
                             <el-button  type="text" icon="el-icon-info" @click="selectLog(index)">日志</el-button>
                             <el-button type="text" icon="el-icon-setting"  @click="edit(index)" :disabled="isRunning(index)">
@@ -46,17 +50,22 @@
             </el-row>
         </el-main>
         <el-dialog title="日志信息" :visible.sync="logVisible"> 
+            <p>{{curLog.success == false ? '失败':'成功'}}</p>
+            <el-row>
+            <p>运行信息</p>
             <el-collapse v-model="activeName" :data="curLog" accordion>
-                <el-collapse-item title="运行结果" name="1">
-                    <div class="divInfo">{{curLog.success == false ? '失败':'成功'}}</div>
+                <el-collapse-item v-for="(log, index) in curLog.runLog" :title="curLog.total[index]" :name="index" :key="log">
+                    <div class="divInfo" >{{log}}</div>
                 </el-collapse-item>
-                <el-collapse-item title="运行信息" name="2">
-                    <div class="divInfo" >{{curLog.runLog}}</div>
-                </el-collapse-item>
+            </el-collapse>
+            </el-row>
+            <el-row>
+                <el-collapse v-model="activeName" :data="curLog" accordion >
                 <el-collapse-item title="错误信息" name="3">
                     <div class="divInfo" >{{curLog.errorLog}}</div>
                 </el-collapse-item>
-            </el-collapse>
+                </el-collapse>
+            </el-row>
         </el-dialog>
     </el-container>
 
@@ -74,12 +83,28 @@ export default {
             tasks: [],
             activeName: '1',
             input: '',
+            timer:0
         }
     },
 
     created() {
         this.getUserTasks()
     },
+    mounted(){
+        if(this.timer){      
+                clearInterval(this.timer)    
+        }else{      
+            this.timer = setInterval(()=>{       
+            // 调用相应的接口，渲染数据        
+            this.getUserTasks()     
+            console.log("get user task")
+            },3000)    
+        }  
+    },
+
+    destroyed(){    
+        clearInterval(this.timer)  
+    },    
 
     methods: {
         getUserTasks() {
@@ -93,7 +118,16 @@ export default {
                     let task_json = JSON.parse(str_tasks[i])
                     task_json.runTaskInfo = JSON.parse(task_json.runTaskInfo)
                     task_json.runResult = JSON.parse(task_json.runResult)
+                    const total = task_json.runResult.total.length
+                    const done = task_json.runResult.runLog.length
+                    if(total == 0){
+                        task_json.runResult['percentage'] = 0
+                    }
+                    else{
+                        task_json.runResult['percentage'] = Math.round((done / total)*100,3)
+                    }                    
                     this.tasks.push(task_json)
+                
                 }
                 console.log(this.tasks)
             })
@@ -246,6 +280,11 @@ export default {
 
     .divInfo {
         white-space: pre-line;
+    }
+
+    .p {
+        white-space: pre-line;
+
     }
 
  

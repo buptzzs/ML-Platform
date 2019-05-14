@@ -57,7 +57,15 @@ export const constantRouterMap = [
         props: { type: 'model' },
         meta: { title: '模型文件', icon: 'file' }
 
-      }
+      },
+      {
+        path: '/resourceManage/metrics',
+        name: 'metrics',
+        component: () => import('@/views/resourceManage/index'),
+        props: { type: 'metrics' },
+        meta: { title: '评估结果', icon: 'file' }
+
+      }      
     ]
     
   },{

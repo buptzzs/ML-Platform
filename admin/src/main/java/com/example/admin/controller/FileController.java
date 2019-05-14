@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.example.admin.entity.FileInfo;
 import com.example.admin.entity.Result;
 import com.example.admin.service.FileService;
+import com.example.admin.service.PreviewFileService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -31,6 +32,9 @@ public class FileController {
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private PreviewFileService previewFileService;
 
     @PostMapping("/upload")
     public Result<String> upload(@RequestParam("file") MultipartFile file,
@@ -87,5 +91,12 @@ public class FileController {
     public Result<List<FileInfo>> listFiles(@RequestParam String username, @RequestParam String type){
         List<FileInfo> files = fileService.getFileInfos(username, type);
         return Result.success(files);
+    }
+
+    @GetMapping("/preview")
+    public Result<String> preview(@RequestParam String username, @RequestParam String type,
+            @RequestParam String filename){
+        log.info("preview");
+        return Result.success("成功",previewFileService.previewFile(username, type, filename));
     }
 }

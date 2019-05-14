@@ -71,7 +71,7 @@
                                             </el-select>
                                         </div>                                        
                                         <div v-else>
-                                            <el-input v-model="param.value"/>
+                                            <el-input v-model="param.value" :placeholder="param.tip"/>
                                         </div>                                        
                                     </el-form-item>
                                 </el-form>
@@ -148,18 +148,28 @@ export default {
                             label: '数据集生成',
                             type:'DatasetGenerate',
                             isLeaf: true                                
-                        },{
-                            label: '特征正则化',
-                            type:'Normalize',
-                            isLeaf: true                                
                         },
                         {
                             label: 'Play',
                             type:'Play',
                             isLeaf: true                                
+                        },{
+                            label: '数据文件预览',
+                            type: 'Preview',
+                            isLeaf: true
                         }
                     ]
                 }, {
+                    label: '特征处理',
+                    type:'FeaturePreprocess',    
+                    children:[
+                        {
+                            label: '特征正则化',
+                            type:'Normalize',
+                            isLeaf: true                                
+                        },
+                    ]                
+                },{
                     label: '分类算法',
                     type: 'Classification',
                     children:[
@@ -217,10 +227,15 @@ export default {
                     type:'Estimate',
                     children:[
                         {
-                            label:'分类结果评估',
+                            label:'二分类评估',
+                            type:'BiClassificationEval',
+                            isLeaf:true                            
+                        },
+                     {
+                            label:'多分类评估',
                             type:'ClassificationEval',
                             isLeaf:true                            
-                        }
+                        }                        
                     ]                    
                 }
                 ]            

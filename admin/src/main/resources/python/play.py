@@ -4,9 +4,9 @@ import time
 import argparse
 
 def main(args):
-    print('开始数数游戏')
-    print('首先创建一个大小为1000000的数组，然后不断打印数组数字')
-    print('过程持续3分钟')
+    print('Begin Play')
+    print('Creat a numpy array of size 1000000, and random select a number from the array.')
+    print('Time cost:',args.time)
     pid =os.getpid()
     print('pid:',pid)
     begin_time = time.time()

@@ -31,9 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 public class FileServiceImpl implements FileService {
     
     @Value("${resource.local_files_path}")
-    private String base_path;
+    public String base_path;
 
-    private Path local_path(String username, String type){
+    
+    public Path local_path(String username, String type){
         log.info(username);
         log.info(type);
         Path path = Paths.get(base_path, username, type).toAbsolutePath().normalize();
@@ -129,10 +130,24 @@ public class FileServiceImpl implements FileService {
     public boolean delete(String username, String type, String filename){
         Path dir = local_path(username, type);
         Path file_path = dir.resolve(filename);
+        log.info("delete:{},{},{},{}",username,filename,dir.toString(),file_path.toString());
         try{
             boolean flag = Files.deleteIfExists(file_path);
             return flag;
         } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean delete_abs(String userRoot, String type, String filename) {
+        Path dir = Paths.get(userRoot, type).toAbsolutePath().normalize();
+        Path file_path = dir.resolve(filename);
+        log.info("delete:{}", file_path.toString());
+        try {
+            boolean flag = Files.deleteIfExists(file_path);
+            return flag;
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

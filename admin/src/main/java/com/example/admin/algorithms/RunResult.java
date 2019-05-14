@@ -17,13 +17,13 @@ public class RunResult {
 
     private Boolean success;
 
-    private int total;
+    private ArrayList<String> total;
 
     public RunResult(){
         this.runLog = new ArrayList<String>();
         this.errorLog = "";
         this.success = false;
-        this.total = 0;
+        this.total = new ArrayList<String>();
     }
 
     public String toString() {
@@ -43,12 +43,19 @@ public class RunResult {
         }
         String errorLog = json.getString("errorLog");
         Boolean success = json.getBoolean("success");
-        int total = json.getInt("total");
+
+        JSONArray components_json = json.getJSONArray("total");
+        ArrayList<String> components = new ArrayList<String>();
+        for (int i = 0; i < components_json.length(); i++) {
+            components.add((String) components_json.get(i));
+        }        
+
         RunResult res = new RunResult();
+
         res.setErrorLog(errorLog);
         res.setRunLog(runLog);
         res.setSuccess(success);
-        res.setTotal(total);
+        res.setTotal(components);
         return res;
     }
 }

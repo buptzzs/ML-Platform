@@ -242,6 +242,21 @@ Flow.registerNode('FileComponent', {
     ]
 }, 'model-card');
 
+Flow.registerNode('Preview', {
+    label: '数据文件预览',
+    color_type: '#FAAD14',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+    ]
+}, 'model-card');
+
 Flow.registerNode('SupportVectorMachine', {
     label: '支持向量机',
     color_type: '#FF0000',
@@ -380,8 +395,8 @@ Flow.registerNode('DecisionTree', {
     ]
 }, 'model-card');
 
-Flow.registerNode('ClassificationEval', {
-    label: '分类评估',
+Flow.registerNode('BiClassificationEval', {
+    label: '二分类评估',
     color_type: '#1C1C1C',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
@@ -393,6 +408,45 @@ Flow.registerNode('ClassificationEval', {
 
     ],
     params: [
+        {
+            name:'f1',
+            value:'true',
+            type:'bool'
+        },{
+            name:'accuracy',
+            value:'true',
+            type: 'bool'
+        },{
+            name:'txt_report',
+            value:'true',
+            type:'bool'
+        },{
+            name:'curve',
+            value:'roc',
+            options: ['roc','pr'],
+            type:'option'
+        }
+    ]
+}, 'model-card');
+
+Flow.registerNode('ClassificationEval', {
+    label: '多分类评估',
+    color_type: '#1C1C1C',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 0, {
+            type: 'input'
+        }],
+
+    ],
+    params: [
+        {
+            name: 'txt_report',
+            value: 'true',
+            type: 'bool'
+        }
     ]
 }, 'model-card');
 
@@ -504,7 +558,8 @@ Flow.registerNode('DatasetGenerate', {
         {
             name: 'label_col',
             value: 'label',
-            type: 'str'
+            type: 'str',
+            tip:'类别所在列，其余列视为特征列'
         },
     ]
 }, 'model-card');
@@ -527,7 +582,8 @@ Flow.registerNode('DeleteColumn', {
         {
             name: 'col',
             value: '',
-            type: 'str'
+            type: 'str',
+            tip:'多个列请用,隔开'
         },
     ]
 }, 'model-card');
@@ -552,11 +608,13 @@ Flow.registerNode('KNearestNeighbor', {
         }, {
             name: 'ratio',
             value: '0.2',
-            type: 'str'
+            type: 'str',
+            tip:'验证集所占比例'
         }, {
             name: 'model_name',
             value: 'KNearestNeighbor_test',
-            type: 'str'
+            type: 'str',
+            tip:'训练保存的模型名称'
         },
         {
             name: 'model',
