@@ -131,7 +131,12 @@ public class AlComponentService {
             for (int j = 0; j < params.length(); j++) {
                 JSONObject param = params.getJSONObject(j);
                 String key = param.getString("name");
-                String value = param.getString("value");
+                String value = "";
+                try{
+                    value = param.getString("value");
+                }catch(Exception e){
+                    value = param.getJSONArray("value").toString();
+                }
                 component.params.setParam(key, value);
             }
             componetMap.put(id, component);

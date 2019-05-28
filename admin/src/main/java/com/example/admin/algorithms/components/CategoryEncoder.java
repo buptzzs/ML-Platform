@@ -9,21 +9,20 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.json.JSONArray;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Impute extends AlComponent {
+public class CategoryEncoder extends AlComponent {
 
-    private static String pyFile = "impute.py";
+    private static String pyFile = "category_encoder.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public Impute() {
+    public CategoryEncoder() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "Impute";
+        name = "CategoryEncoder";
 
     }
 
@@ -54,7 +53,7 @@ public class Impute extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("strategy", "mean");
+            setParam("strategy", "");
         }
     }
 

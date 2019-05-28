@@ -31,12 +31,12 @@
                     id="node_detailpannel"
                     data-status="node-selected"
                     class="pannel">
-                    <div class="pannel-title">模型详情: {{selectedModel.shape}}
+                    <div class="pannel-title">组件详情: {{selectedModel.shape}}
                     </div>
                     <div class="block-container">
-                        <div v-if="selectedModel && selectedModel.type === 'node'" >
+                        <div v-if="selectedModel && selectedModel.type === 'node' && inputingParams.length <=7" >
                             <div >
-                                <el-form label-width="100px">
+                                <el-form label-width="60px">
                                     <el-form-item
                                         v-for="param in inputingParams"
                                         v-bind:key="param.name"
@@ -68,14 +68,36 @@
                                                     :value="option"
                                                 >
                                                 </el-option>
-                                            </el-select>
-                                        </div>                                        
+                                            </el-select>                                            
+                                        </div>    
+                                        <div  v-else-if="param.type=='option_add'">
+                                            <div v-for="(s_param, index) in param.value"
+                                                :key='index'
+                                                :value='s_param'
+                                            >
+                                                <el-input class="param_item" v-model="s_param.column"/>
+                                                <el-select class="param_item"  v-model="s_param.value">
+                                                    <el-option
+                                                        v-for="option in param.options"
+                                                        :key="option"
+                                                        :label="option"
+                                                        :value="option"
+                                                    >
+                                                    </el-option>
+                                                </el-select>
+                                                <el-button @click="add_param(param)" size="small"  circle icon="el-icon-plus"></el-button>
+                                                <el-button @click="delete_param(param, index)" size="small"  circle icon="el-icon-delete"></el-button>                                                
+                                            </div >                                            
+                                        </div>                                                                             
                                         <div v-else>
                                             <el-input v-model="param.value" :placeholder="param.tip"/>
                                         </div>                                        
                                     </el-form-item>
                                 </el-form>
                             </div>
+                        </div>
+                        <div v-else>
+                            <el-button @click="dialogVisible = true">配置</el-button>
                         </div>
                     </div>
                 </div>
@@ -96,6 +118,76 @@
                 @change-zoom="changeZoom" />
             <page />
         </div>
+        <el-dialog
+            :title="selectedModel.shape"
+            :visible.sync="dialogVisible"
+            width="50%">
+            <div >
+                <el-form label-width="150px">
+                    <el-form-item
+                        v-for="param in inputingParams"
+                        v-bind:key="param.name"
+                        :label="param.name"
+                        >
+                        <div v-if="param.type=='bool'">
+                                <el-radio-group v-model="param.value">
+                                <el-radio  label='true'/>
+                                <el-radio label='False'/>
+                                </el-radio-group>
+                        </div>
+                        <div v-else-if="param.type=='model'">
+                            <el-select v-model="param.value" placeholder="请选择">
+                                <el-option
+                                    v-for="file in model_files"
+                                    :key="file.name"
+                                    :label="file.name"
+                                    :value="file.name"
+                                >
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="param.type=='option'">
+                            <el-select v-model="param.value" placeholder="请选择">
+                                <el-option
+                                    v-for="option in param.options"
+                                    :key="option"
+                                    :label="option"
+                                    :value="option"
+                                >
+                                </el-option>
+                            </el-select>                                            
+                        </div>    
+                        <div  v-else-if="param.type=='option_add'">
+                            <div v-for="(s_param, index) in param.value"
+                                :key='index'
+                                :value='s_param'
+                            >
+                                <el-input class="param_item" v-model="s_param.column"/>
+                                <el-select class="param_item"  v-model="s_param.value">
+                                    <el-option
+                                        v-for="option in param.options"
+                                        :key="option"
+                                        :label="option"
+                                        :value="option"
+                                    >
+                                    </el-option>
+                                </el-select>
+                                <el-button @click="add_param(param)" size="small"  circle icon="el-icon-plus"></el-button>
+                                <el-button @click="delete_param(param, index)" size="small"  circle icon="el-icon-delete"></el-button>                                                
+                            </div >                                            
+                        </div>                                                                             
+                        <div v-else>
+                            <el-input v-model="param.value" :placeholder="param.tip"/>
+                        </div>                                        
+                    </el-form-item>
+                </el-form>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -120,6 +212,7 @@ export default {
     extends: Editor,
     data() {
         return {
+            dialogVisible: false,
             temp: 'base-flow-editor',
             tempInputingLabel: '',
             tempColor: '',
@@ -145,21 +238,35 @@ export default {
                             type:'DeleteColumn',
                             isLeaf: true                            
                         },{
-                            label: '数据集生成',
-                            type:'DatasetGenerate',
-                            isLeaf: true                                
-                        },
-                        {
-                            label: 'Play',
-                            type:'Play',
-                            isLeaf: true                                
-                        },{
                             label: '数据文件预览',
                             type: 'Preview',
                             isLeaf: true
+                        },{
+                            label: '类别编码',
+                            type: 'CategoryEncoder',
+                            isLeaf: true                            
+                        },{
+                            label: '值缩放',
+                            type: 'Scaler',
+                            isLeaf: true                            
+                        },{
+                            label: 'K桶离散化',
+                            type: 'KBinsDiscretizer',
+                            isLeaf: true                            
                         }
                     ]
                 }, {
+                    label: '数据集',
+                    type:'Dataset',
+                    children:[
+                        {
+                            label: '数据集生成',
+                            type:'DatasetGenerate',
+                            isLeaf: true                                
+                        }
+                    ]
+                },
+                {
                     label: '特征处理',
                     type:'FeaturePreprocess',    
                     children:[
@@ -187,8 +294,8 @@ export default {
                             type:'Bayes',
                             isLeaf:true                               
                         },{
-                            label:'随机深林',
-                            type:'random-forest',
+                            label:'随机森林分类器',
+                            type:'RandomForestClassifier',
                             isLeaf:true                                  
                         },
                         {
@@ -237,6 +344,16 @@ export default {
                             isLeaf:true                            
                         }                        
                     ]                    
+                },{
+                    label:'测试用',
+                    type: 'play',
+                    children:[
+                        {
+                            label: 'Play',
+                            type:'Play',
+                            isLeaf: true                                
+                        }
+                    ]
                 }
                 ]            
             };
@@ -352,7 +469,23 @@ export default {
                 console.log(this.model_files)
             })
         },        
+        add_param(param){
+            param.value.push({
+                'column':"",
+                "value":""
+            })
+            console.log(param)
+        },
+        delete_param(param, index){
+            if (param.value.length == 1){
+                this.$message("至少保留一个参数");
+                return
+            }
 
+            param.value.splice(index, 1)
+            console.log(param)
+
+        }        
 
 
 
@@ -405,7 +538,7 @@ export default {
   right: 0px;
   z-index: 2;
   background: #F7F9FB;
-  width: 300px;
+  width: 350px;
   border-left: 1px solid #E6E9ED;
 }
 #detailpannel .pannel{
@@ -414,20 +547,14 @@ export default {
 #detailpannel .block-containe{
   padding-top: 20px;
 }
-#detailpannel .input{
-  margin-left: 16px;
+
+#detailpannel .param_item{
+  width: 90px;
 }
-#detailpannel .name-input{
-  width: 120px;
-}
-#detailpannel .width-input{
-  width: 52px;
-}
-#detailpannel .height-input{
-  width: 52px;
-}
+
+
 #detailpannel .block-container{
-  padding: 16px 8px;
+  padding: 16px 5px;
   text-align: left;
 }
 .bottom-container{

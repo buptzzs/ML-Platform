@@ -2,16 +2,27 @@
     <el-container> 
         <el-main>
             <el-row>
-                <div style="margin-bottom: 15px;">
+                <el-col :span="20">
                     <el-input v-model="input" placeholder="新建任务名">
                         <el-button title="添加" slot="append" icon="el-icon-plus" v-on:click="addUserTask">
                         </el-button>
-                    </el-input>
-                    <el-button  title="刷新" icon="el-icon-refresh" @click="getUserTasks" >
+                    </el-input>  
+                    <el-button  title="刷新" icon="el-icon-refresh" @click="getUserTasks" >                        
                     </el-button>
-                </div>
+                </el-col>
+                    <el-col :span="4">
+                    <el-switch
+                        style="display: block"
+                        v-model="card"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="卡片式布局"
+                        inactive-text="列表式布局">
+                    </el-switch>
+                </el-col>                
             </el-row>
-            <el-row>
+            <el-divider></el-divider>            
+            <el-row v-if="card">
                 <el-col :span="6" v-for="(task, index) in tasks" :key="task.name" :offset="index % 3 == 0 ? 0 : 1">
                     <el-card>
                         <div slot="header">
@@ -30,7 +41,7 @@
                             <time class="time">运行终止时间: {{task.runTaskInfo.endTime}}</time>
                         </div>
                         <div class="info">
-                            <div class="state" :style="state_color(task.runTaskInfo.taskState)">状态: {{task.runTaskInfo.taskState}}</div>
+                            <div class="state" >状态: {{task.runTaskInfo.taskState}}</div>
                         </div>         
                         <div>
                             <el-progress :percentage="task.runResult.percentage" status="" color="rgba(142, 113, 199, 0.7)"></el-progress>
@@ -47,6 +58,64 @@
                         </el-row>
                     </el-card>
                 </el-col>
+            </el-row>
+            <el-row v-else>
+                <el-table
+                    :data="tasks"
+                >
+                    <el-table-column
+                        label="任务名"
+                        prop="taskname"
+                        sortable
+                    > 
+                    </el-table-column>
+                    <el-table-column
+                        label="创建时间"
+                        prop="createdTime"
+                        sortable
+                    > 
+                    </el-table-column>
+                    <el-table-column
+                        label="运行起始时间"
+                        prop="runTaskInfo.startTime"
+                        sortable
+                    > 
+                    </el-table-column>           
+                    <el-table-column
+                        label="运行终止时间"
+                        prop="runTaskInfo.endTime"
+                        sortable
+                    > 
+                    </el-table-column>    
+                    <el-table-column
+                        label="状态"
+                        prop="runTaskInfo.taskState"
+                        :filters="[{ text: '成功', value: 'SUCCESS' }, { text: '失败', value: 'FAILED' },{ text: '运行中', value: 'RUNNING' }]"
+                        :filter-method="filterTag"
+                        filter-placement="bottom-end"
+                        > 
+                        <template slot-scope="scope">
+                            <el-tag
+                            :type="show_state(scope.row.runTaskInfo.taskState)"
+                            disable-transitions>{{scope.row.runTaskInfo.taskState}}</el-tag>
+                        </template>                    
+                    </el-table-column>    
+                    <el-table-column label="进度"> 
+                        <template slot-scope="scope">
+                            <el-progress :percentage="scope.row.runResult.percentage" status="" color="rgba(142, 113, 199, 0.7)"></el-progress>
+                        </template>
+                    </el-table-column>    
+                    <el-table-column label="操作"> 
+                         <template slot-scope="scope">
+                            <el-button  type="text" icon="el-icon-info" @click="selectLog(scope.$index)">日志</el-button>
+                            <el-button type="text" icon="el-icon-setting"  @click="edit(scope.$index)" :disabled="isRunning(scope.$index)">编辑</el-button>
+                            <el-button type="text"  v-if="! isRunning(scope.$index)" icon="el-icon-caret-right" @click="run(scope.$index)" >运行</el-button>
+                            <el-button type="text"  v-else icon="el-icon-circle-close" @click="stop(scope.$index)" >终止</el-button>
+                            <el-button type="text" icon="el-icon-delete" @click="deleteUserTask(scope.$index)" :disabled="isRunning(scope.$index)">删除</el-button>                                             
+                        </template>
+                    </el-table-column>                                                                                                                 
+
+                </el-table>
             </el-row>
         </el-main>
         <el-dialog title="日志信息" :visible.sync="logVisible"> 
@@ -83,7 +152,8 @@ export default {
             tasks: [],
             activeName: '1',
             input: '',
-            timer:0
+            timer:0,
+            card:true,
         }
     },
 
@@ -230,19 +300,22 @@ export default {
             return flag
         },      
 
-        state_color(state){
-            if(state=='SUCCESS'){
-                return 'color:#67C23A'
-            }
-            else if(state == "RUNNING"){
-                return 'color:#E6A23C'
-            }
-            else if(state == "FAILED"){
-                return 'color:#F56C6C'
-            }else{
-                return 'color:#909399'
+        show_state(state){
+          if(state == 'SUCCESS'){
+             return 'success'
+          }
+          else if(state == 'FAILED'){
+            return 'info'
+          }
+          else if(state == 'RUNNING'){
+            return 'danger'
+          }
+          return ''
 
-            }
+        },
+
+        filterTag(value, row) {
+            return row.runTaskInfo.taskState === value;
         },
     }
 }
@@ -274,7 +347,7 @@ export default {
         content: "";
     }
 
-    .el-input {
+    .el-row .el-input {
         width: 300px;
     }
 

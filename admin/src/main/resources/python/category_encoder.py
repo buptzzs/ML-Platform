@@ -3,6 +3,9 @@ import os
 import numpy as np
 import pandas as pd
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OrdinalEncoder
+
+
 def main(args):
     data_dir = os.path.join(args.root, "data")  # get data dir
 
@@ -31,15 +34,13 @@ def main(args):
     for column_param in columns_param:
         column = column_param['column']
         strategy = column_param['value']
-        print(f'fill column {column} with strategy {strategy}')
-        if strategy == 'mean':
-            df[column] = df[column].fillna(df[column].mean())
-        elif strategy == '0':
-            df[column] = df[column].fillna(0)
-        elif strategy == 'bfill':
-            df[column] = df[column].fillna(method='bfill')
-        elif strategy == 'ffill':
-            df[column] = df[column].fillna(method='ffill')
+        print(f'category_encode column {column} with strategy {strategy}')
+        if strategy == 'onehot':
+            dummies  = pd.get_dummies(df[column])
+            df = df.join(dummies)
+            df.drop([column], axis=1,inplace=True)
+        elif strategy == "factorize":
+            df[column] = pd.factorize(df[column])[0]            
         else:
             raise "错误的参数"
 

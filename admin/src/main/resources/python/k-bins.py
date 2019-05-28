@@ -2,14 +2,16 @@ import argparse
 import os
 import numpy as np
 import pandas as pd
-from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import KBinsDiscretizer
+
+
 def main(args):
     data_dir = os.path.join(args.root, "data")  # get data dir
 
     data_path = os.path.join(data_dir, args.inFile)
     out_path = os.path.join(data_dir, args.outFileName)
 
-    params = args.strategy[1:-1].replace('{','').split('},') #解析json字符串
+    params = args.nbins[1:-1].replace('{','').split('},') #解析json字符串
     columns_param = []
     for param in params:
         column_param = {}
@@ -30,18 +32,10 @@ def main(args):
 
     for column_param in columns_param:
         column = column_param['column']
-        strategy = column_param['value']
-        print(f'fill column {column} with strategy {strategy}')
-        if strategy == 'mean':
-            df[column] = df[column].fillna(df[column].mean())
-        elif strategy == '0':
-            df[column] = df[column].fillna(0)
-        elif strategy == 'bfill':
-            df[column] = df[column].fillna(method='bfill')
-        elif strategy == 'ffill':
-            df[column] = df[column].fillna(method='ffill')
-        else:
-            raise "错误的参数"
+        nbins = column_param['value']
+        print(f'discretizes column {column} with  {nbins} bins')
+        dis = KBinsDiscretizer(n_bins=int(nbins), encode='ordinal')
+        df[column] = dis.fit_transform(df[column].values.reshape(-1,1))
 
     df.to_json(out_path+'.json', orient="records")
 
@@ -52,7 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('--inFile', type=str, help='input file path')
     parser.add_argument('--outFileName', type=str, help="output file's name")
     parser.add_argument('--root', type=str, help="file root")
-    parser.add_argument('--strategy', type=str, default='') # [['',''],['','']]
+    parser.add_argument('--nbins', type=str, default='') # [['',''],['','']]
 
 
     args = parser.parse_args()

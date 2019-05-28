@@ -127,17 +127,17 @@ $light_gray:#eee;
     }
   }
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(31, 24, 77, 0.1);
+    background: rgba(24, 4, 4, 0.1);
     border-radius: 5px;
-    color: #454545;
+    color: #310707;
   }
 }
 
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-$bg:#2d3a4b;
+$bg:#162233;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 .login-container {
@@ -145,6 +145,8 @@ $light_gray:#eee;
   height: 100%;
   width: 100%;
   background-color: $bg;
+  background-image:url('../../assets/bupt.jpg');
+  background-size:cover;
   .login-form {
     position: absolute;
     left: 0;
@@ -153,10 +155,11 @@ $light_gray:#eee;
     max-width: 100%;
     padding: 35px 35px 15px 35px;
     margin: 120px auto;
+    background-color: rgba(94, 90, 90, 0.933);
   }
   .tips {
     font-size: 14px;
-    color: #fff;
+    color: rgb(113, 87, 161);
     margin-bottom: 10px;
     span {
       &:first-of-type {

@@ -136,8 +136,8 @@ Flow.registerNode('Play', {
 }, 'model-card');
 
 // 随机森林
-Flow.registerNode('random-forest', {
-    label: '随机森林',
+Flow.registerNode('RandomForestClassifier', {
+    label: '随机森林分类器',
     color_type: '#9254DE',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
@@ -154,7 +154,7 @@ Flow.registerNode('random-forest', {
     params: [
         {
             name: 'train',
-            value: 'false',
+            value: 'true',
             type:'bool'
         }, {
             name: 'ratio',
@@ -166,10 +166,56 @@ Flow.registerNode('random-forest', {
             type:'str'
         },
         {
-            name: 'model',
+            name: 'model_path',
             value: '',
             type:'model'
         },
+        {
+            name:'max_depth',
+            value:'2',
+            type:'str'
+        },
+        {
+            name: 'bootstrap',
+            value: 'true',
+            type: 'bool'
+        },
+        {
+            name: 'n_estimators',
+            value: '1',
+            type: 'str'
+        },
+        {
+            name: 'warm_start',
+            value: 'false',
+            type: 'bool'
+        },
+        {
+            name: 'min_samples_split',
+            value: '0',
+            type: 'str'
+        },
+        {
+            name: 'min_samples_leaf',
+            value: '1',
+            type: 'str'
+        },
+        {
+            name: 'min_weight_fraction_leaf',
+            value: '0',
+            type: 'str'
+        },
+        {
+            name: 'n_jobs',
+            value: '1',
+            type: 'str'
+        },
+        {
+            name: 'random_state',
+            value: '0',
+            type: 'str'
+        },                                                                
+
     ]
 }, 'model-card');
 
@@ -492,6 +538,48 @@ Flow.registerNode('LogisticRegression', {
     ]
 }, 'model-card');
 
+Flow.registerNode('LogisticRegression', {
+    label: '逻辑回归',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]        
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str'
+        },{
+            name: 'max_iter',
+            value: '10',
+            type: 'str'
+        }, 
+        {
+            name: 'model_name',
+            value: 'logistic_regression_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        },
+
+    ]
+}, 'model-card');
+
 Flow.registerNode('Impute', {
     label: '缺失值填充',
     color_type: '#FFFF00',
@@ -509,12 +597,109 @@ Flow.registerNode('Impute', {
     params: [
         {
             name: 'strategy',
-            value: 'mean',
             options: ['mean', '0','bfill', 'ffill'],
-            type: 'option'
+            type: 'option_add',
+            value: [
+                {
+                    'column':"",
+                    'value':""
+                }
+            ]
         }, 
     ]
 }, 'model-card');
+
+Flow.registerNode('CategoryEncoder', {
+    label: '类别编码',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'strategy',
+            options: ['onehot','factorize'],
+            type: 'option_add',
+            value: [
+                {
+                    'column': "",
+                    'value': ""
+                }
+            ]
+        },
+    ]
+}, 'model-card');
+
+
+Flow.registerNode('Scaler', {
+    label: '值缩放',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'strategy',
+            options: ['standard', 'minmax','maxabs'],
+            type: 'option_add',
+            value: [
+                {
+                    'column': "",
+                    'value': ""
+                }
+            ]
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('KBinsDiscretizer', {
+    label: 'K桶离散化',
+    color_type: '#FFFF00',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'nbins',
+            options: ['2','3','4','5','6','7','8','9','10'],
+            type: 'option_add',
+            value: [
+                {
+                    'column': "",
+                    'value': ""
+                }
+            ]
+        },
+    ]
+}, 'model-card');
+
+
+
+
 
 Flow.registerNode('Normalize', {
     label: '特征正则化',

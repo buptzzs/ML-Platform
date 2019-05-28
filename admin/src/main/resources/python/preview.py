@@ -20,8 +20,14 @@ def main(args):
     else:
         df = pd.read_csv(file_path, sep=',')
 
-    print('read file done! data head:')
+    print('****Read file done! data head****')
     print(df.head())
+
+    print('****Mssing values****')
+    print(df.isnull().sum()[df.isnull().sum()>0])
+
+    print("*****Data describe****")
+    print(df.describe())
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

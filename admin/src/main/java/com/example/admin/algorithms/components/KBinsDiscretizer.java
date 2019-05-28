@@ -9,21 +9,19 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.json.JSONArray;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Impute extends AlComponent {
+public class KBinsDiscretizer extends AlComponent {
 
-    private static String pyFile = "impute.py";
+    private static String pyFile = "k-bins.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public Impute() {
+    public KBinsDiscretizer() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "Impute";
+        name = "KBinsDiscretizer";
 
     }
 
@@ -35,11 +33,10 @@ public class Impute extends AlComponent {
     @Override
     public RunResult run(String root, String inFile, String outFile) {
         List<String> sParams = new ArrayList<String>();
-        String strategys = params.getParam("strategy"); // [['',''],['','']]
+        String nbins = params.getParam("nbins"); // [['',''],['','']]
 
-        System.out.println(strategys);
-        sParams.add("--strategy");
-        sParams.add(strategys);
+        sParams.add("--nbins");
+        sParams.add(nbins);
 
         sParams.add("--inFile");
         sParams.add(inFile);
@@ -54,7 +51,7 @@ public class Impute extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("strategy", "mean");
+            setParam("nbins", "");
         }
     }
 
