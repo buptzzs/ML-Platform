@@ -4,7 +4,9 @@ from sklearn.metrics import adjusted_rand_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import numpy as np
 import pandas as pd
+from sklearn.model_selection import ShuffleSplit
 model = 'cluster'
 
 
@@ -31,17 +33,14 @@ def main(args):
         dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model)
-        regr = load(model_path)
+        model_path = os.path.join(model_dir,args.model_path)
+        clf = load(args.model)
         x = data['data']
-        pred = regr.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        pred = clf.predict(x)
         df = pd.DataFrame({
-            'pred':pred
-        })
+            'pred': pred,
+        })        
         df.to_csv(out_path)
-        print('save pred to', args.outFileName+'.csv')
-        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 

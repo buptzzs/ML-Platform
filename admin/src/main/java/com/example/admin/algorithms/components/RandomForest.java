@@ -58,7 +58,6 @@ public class RandomForest extends AlComponent {
             setParam("model","");
             setParam("n_estimators", "10");
             setParam("min_samples_split", "2");
-            setParam("min_impurity_decrease", "0");
             setParam("min_samples_leaf","1");
             
         }

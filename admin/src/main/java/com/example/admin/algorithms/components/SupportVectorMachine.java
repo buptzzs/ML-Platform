@@ -57,7 +57,7 @@ public class SupportVectorMachine extends AlComponent {
             setParam("model_name", "SVM_test");
             setParam("model","");
             setParam("kernel","rbf");
-            setParam("c", "1.0");
+            setParam("C", "1.0");
             setParam("coef0", "0.0");
 
         }

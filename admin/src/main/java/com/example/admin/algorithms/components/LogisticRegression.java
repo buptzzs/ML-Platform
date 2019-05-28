@@ -10,7 +10,6 @@ import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
 
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -52,15 +51,11 @@ public class LogisticRegression extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "True");
+            setParam("train", "False");
             setParam("ratio", "0.2");
+            setParam("max_iter","10");
             setParam("model_name", "logistic_test");
             setParam("model","");
-            setParam("dual", "False");
-            setParam("C", "1.0");
-            setParam("fit_intercept", "True");
-            setParam("intercept_scaling","1.0");
-            
         }
     }
 

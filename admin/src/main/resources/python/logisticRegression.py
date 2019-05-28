@@ -4,7 +4,9 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import numpy as np
 import pandas as pd
+from sklearn.model_selection import ShuffleSplit
 model = 'linear_model'
 
 
@@ -17,47 +19,61 @@ def main(args):
     print('load data from'+data_path)
     
     data = pickle.load(open(data_path, 'rb'))
+    out_path = os.path.join(data_dir, args.outFileName+'.csv')
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        clf = linear_model.LogisticRegression(dual=args.dual,C=args.C,fit_intercept=args.fit_intercept,intercept_scaling=args.intercept_scaling)
+        clf = linear_model.LogisticRegression(max_iter=args.max_iter)
 
         assert 'target' in data
 
         features = data['data']
         labels = data['target']
 
-        ratio_num = int(features.shape[0] * ratio)
-        x_train = features[ratio_num:]
-        x_test = features[:ratio_num]
 
-        y_train = labels[ratio_num:]
-        y_test = labels[:ratio_num]
+        rs = ShuffleSplit(n_splits=1, test_size=ratio)
+        train_index, val_index = next(rs.split(features, labels))
 
-        clf.fit(x_train, y_train.astype(int))
+        x_train = features[train_index]
+        x_test = features[val_index]
+
+        y_train = labels[train_index]
+        y_test = labels[val_index]
+
+        clf.fit(x_train, y_train)
+
+        train_pred = clf.predict(x_train)
+        acc = np.sum(y_train == train_pred) / y_train.shape[0]
+        print(f"Train Acc:{acc}")
+
         y_pred = clf.predict(x_test)
-
         # The coefficients
         print('Coefficients: \n', clf.coef_)
         # The mean squared error
-        print("Mean squared error: %.2f"
-            % mean_squared_error(y_test, y_pred))
+        y_prob = clf.predict_proba(x_test)
+
+        df = pd.DataFrame({
+            'pred': y_pred,
+            'target': y_test,
+            'prob': y_prob[:,1] # 这里有待商榷
+        })
+        print(f'validation results save to:{args.outFileName}.csv')
+        df.to_csv(out_path)
+        print("Some results of validation:")
+        print(df.head())
 
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(clf, model_path)
     else:
-         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model)
-        clf = load(model_path)
+        # TODO: How to Save the prediction?
+        model_path = os.path.join(model_dir,args.model_path)
+        clf = load(args.model)
         x = data['data']
         pred = clf.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName+'.csv')
         df = pd.DataFrame({
-            'pred':pred
-        })
+            'pred': pred,
+        })        
         df.to_csv(out_path)
-        print('save pred to', args.outFileName+'.csv')
-        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
@@ -69,16 +85,13 @@ if __name__ == '__main__':
 
     parser.add_argument('--train', type=bool, default=True)
     parser.add_argument('--ratio', type=float, default=0.2)
+    parser.add_argument('--max_iter', type=int, default=10)
+
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
-    parser.add_argument('--dual', type=bool, default=False)
-    parser.add_argument('--C', type=float, default=1.0)
-    parser.add_argument('--fit_intercept', type=bool, default=True)
-    parser.add_argument('--intercept_scaling', type=float, default=1.0)
-      
+
     args = parser.parse_args()
-    
     print(args)
 
     main(args)

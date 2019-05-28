@@ -1,10 +1,12 @@
 import pickle
 from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, r2_score
-import pandas as pd
 from joblib import dump, load
 import argparse
 import os
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import ShuffleSplit
 model = 'linear_model'
 
 def main(args):
@@ -26,12 +28,14 @@ def main(args):
         features = data['data']
         labels = data['target']
 
-        ratio_num = int(features.shape[0] * ratio)
-        x_train = features[ratio_num:]
-        x_test = features[:ratio_num]
+        rs = ShuffleSplit(n_splits=1, test_size=ratio)
+        train_index, val_index = next(rs.split(features, labels))
 
-        y_train = labels[ratio_num:]
-        y_test = labels[:ratio_num]
+        x_train = features[train_index]
+        x_test = features[val_index]
+
+        y_train = labels[train_index]
+        y_test = labels[val_index]
 
         regr.fit(x_train, y_train)
         y_pred = regr.predict(x_test)
@@ -41,22 +45,27 @@ def main(args):
         # The mean squared error
         print("Mean squared error: %.2f"
             % mean_squared_error(y_test, y_pred))
+        df = pd.DataFrame({
+            'pred': y_pred,
+            'target': y_test,
+        })
+        print(f'validation results save to:{args.outFileName}.csv')
+        df.to_csv(out_path)
+        print("Some results of validation:")
+        print(df.head())
 
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
-        model_path = os.path.join(model_dir,args.model)
-        regr = load(model_path)
+        model_path = os.path.join(model_dir,args.model_path)
+        clf = load(args.model)
         x = data['data']
-        pred = regr.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName+'.csv')
+        pred = clf.predict(x)
         df = pd.DataFrame({
-            'pred':pred
-        })
+            'pred': pred,
+        })        
         df.to_csv(out_path)
-        print('save pred to', args.outFileName+'.csv')
-        print('some results in pred:',pred[:100])
 
 if __name__ == '__main__':
 
