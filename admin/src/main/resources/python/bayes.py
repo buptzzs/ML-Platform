@@ -1,9 +1,13 @@
 import pickle
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import ShuffleSplit
+
 model = 'naive_bayes'
 
 
@@ -16,39 +20,53 @@ def main(args):
     print('load data from'+data_path)
     
     data = pickle.load(open(data_path, 'rb'))
+    out_path = os.path.join(data_dir, args.outFileName+'.csv')
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        gnb = GaussianNB()
+        clf = ComplementNB(alpha=args.alpha,fit_prior=args.fit_prior,norm=args.norm)
 
         assert 'target' in data
 
         features = data['data']
         labels = data['target']
 
-        ratio_num = int(features.shape[0] * ratio)
-        x_train = features[ratio_num:]
-        x_test = features[:ratio_num]
+        rs = ShuffleSplit(n_splits=1, test_size=ratio)
+        train_index, val_index = next(rs.split(features, labels))
 
-        y_train = labels[ratio_num:]
-        y_test = labels[:ratio_num]
+        x_train = features[train_index]
+        x_test = features[val_index]
 
-        gnb.fit(x_train, y_train)
-        y_pred = gnb.predict(x_test)
+        y_train = labels[train_index]
+        y_test = labels[val_index]
+
+        clf.fit(x_train, y_train)
+        y_pred = clf.predict(x_test)
 
         # The accuracy
         print('Accuracy: \n',accuracy_score(y_test, y_pred))
 
+        df = pd.DataFrame({
+            'pred': y_pred,
+            'target': y_test,
+        })
+        print(f'validation results save to:{args.outFileName}.csv')
+        df.to_csv(out_path)
+        print("Some results of validation:")
+        print(df.head())
+
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
-        dump(gnb, model_path)
+        dump(clf, model_path)
     else:
         # TODO: How to Save the prediction?
         model_path = os.path.join(model_dir,args.model_path)
-        gnb = load(args.model)
+        clf = load(args.model)
         x = data['data']
-        pred = gnb.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        pred = clf.predict(x)
+        df = pd.DataFrame({
+            'pred': pred,
+        })        
+        df.to_csv(out_path)
 
 if __name__ == '__main__':
 
@@ -63,6 +81,9 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
+    parser.add_argument('--alpha', type=float, default=1.0)
+    parser.add_argument('--fit_prior', type=bool, default=True)
+    parser.add_argument('--norm', type=bool, default=False)
 
     args = parser.parse_args()
     print(args)

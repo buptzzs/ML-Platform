@@ -34,7 +34,11 @@
                     <div class="pannel-title">组件详情: {{selectedModel.shape}}
                     </div>
                     <div class="block-container">
+<<<<<<< HEAD
                         <div v-if="selectedModel && selectedModel.type === 'node' && inputingParams.length <=7" >
+=======
+                        <div v-if="selectedModel && selectedModel.type === 'node'" >
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                             <div >
                                 <el-form label-width="60px">
                                     <el-form-item
@@ -68,6 +72,7 @@
                                                     :value="option"
                                                 >
                                                 </el-option>
+<<<<<<< HEAD
                                             </el-select>                                            
                                         </div>    
                                         <div  v-else-if="param.type=='option_add'">
@@ -89,6 +94,10 @@
                                                 <el-button @click="delete_param(param, index)" size="small"  circle icon="el-icon-delete"></el-button>                                                
                                             </div >                                            
                                         </div>                                                                             
+=======
+                                            </el-select>
+                                        </div>                                        
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                                         <div v-else>
                                             <el-input v-model="param.value" :placeholder="param.tip"/>
                                         </div>                                        
@@ -96,9 +105,12 @@
                                 </el-form>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <div v-else>
                             <el-button @click="dialogVisible = true">配置</el-button>
                         </div>
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                     </div>
                 </div>
                 <div
@@ -238,6 +250,7 @@ export default {
                             type:'DeleteColumn',
                             isLeaf: true                            
                         },{
+<<<<<<< HEAD
                             label: '数据文件预览',
                             type: 'Preview',
                             isLeaf: true
@@ -267,6 +280,23 @@ export default {
                     ]
                 },
                 {
+=======
+                            label: '数据集生成',
+                            type:'DatasetGenerate',
+                            isLeaf: true                                
+                        },
+                        {
+                            label: 'Play',
+                            type:'Play',
+                            isLeaf: true                                
+                        },{
+                            label: '数据文件预览',
+                            type: 'Preview',
+                            isLeaf: true
+                        }
+                    ]
+                }, {
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                     label: '特征处理',
                     type:'FeaturePreprocess',    
                     children:[
@@ -294,15 +324,62 @@ export default {
                             type:'Bayes',
                             isLeaf:true                               
                         },{
+<<<<<<< HEAD
                             label:'随机森林分类器',
                             type:'RandomForestClassifier',
                             isLeaf:true                                  
                         },
                         {
-                            label:'K最近邻',
+                            label:'K最近邻分类器',
                             type:'KNearestNeighbor',
                             isLeaf:true
-                        }                        
+                        },{
+                            label:'决策树分类器',
+                            type:'DecisionTree',
+                            isLeaf:true
+                        },{
+                            label:'AdaBoost分类器',
+=======
+                            label:'随机森林',
+                            type:'random-forest',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'K近邻',
+                            type:'KNearestNeighbor',
+                            isLeaf:true
+                        },
+                        {
+                            label:'决策树',
+                            type:'DecisionTree',
+                            isLeaf:true
+                        },{
+                            label:'AdaBoost',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'AdaBoost',
+                            isLeaf:true                                  
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'梯度提升树分类器',
+=======
+                            label:'梯度提升树',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'GradientBoosting',
+                            isLeaf:true
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'随机梯度下降分类器',
+                            type:'SGDClassifier',
+                            isLeaf:true
+                        }                          
+=======
+                            label:'随机梯度下降',
+                            type:'SGDClassifier',
+                            isLeaf:true
+                        }                            
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                     ]
                 }, {
                     label: '聚类算法',
@@ -312,6 +389,25 @@ export default {
                             label:'k均值聚类',
                             type:'k-means',
                             isLeaf:true
+<<<<<<< HEAD
+                        },{
+                            label:'均值漂移',
+                            type:'MeanShift',
+                            isLeaf:true
+                        },{
+                            label:'谱聚类',
+                            type:'SpectralClustering',
+                            isLeaf:true
+                        },{
+                            label:'高斯混合模型',
+                            type:'GaussianMixture',
+                            isLeaf:true
+                        },{
+                            label:'BIRCH聚类',
+                            type:'Brich',
+                            isLeaf:true
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                         }
                     ]
                 },{
@@ -319,14 +415,71 @@ export default {
                     type:'Regression',
                     children:[
                         {
+                            label:'线性回归',
+                            type:'LinearRegression',
+                            isLeaf:true
+                        },
+                        {
                             label:'支持向量机回归',
                             type:'SupportVectorRegression',
                             isLeaf:true                            
                         },
                         {
+                            label:'贝叶斯线性回归',
+                            type:'BayesianRidge',
+                            isLeaf:true                               
+                        },{
+<<<<<<< HEAD
+                            label:'随机森林回归',
+=======
+                            label:'随机森林',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'random-forest-re',
+                            isLeaf:true                                  
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'K近邻回归',
+=======
+                            label:'K近邻',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'KNearestNeighborRe',
+                            isLeaf:true
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'决策树回归',
+                            type:'DecisionTreeRe',
+                            isLeaf:true
+                        }, {
+                            label:'AdaBoost回归',
+=======
                             label:'决策树',
-                            type:'DecisionTree',
-                            isLeaf:true                            
+                            type:'DecisionTreeRe',
+                            isLeaf:true
+                        }, {
+                            label:'AdaBoost',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'AdaBoostRe',
+                            isLeaf:true                                  
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'梯度提升树回归',
+=======
+                            label:'梯度提升树',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'GradientBoostingRe',
+                            isLeaf:true
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'随机梯度下降回归',
+=======
+                            label:'随机梯度下降',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'SGDRegressor',
+                            isLeaf:true
                         }                        
                     ]                    
                 },{
@@ -338,11 +491,22 @@ export default {
                             type:'BiClassificationEval',
                             isLeaf:true                            
                         },
-                     {
+                        {
                             label:'多分类评估',
                             type:'ClassificationEval',
                             isLeaf:true                            
-                        }                        
+<<<<<<< HEAD
+                        },
+                        {
+                            label:'回归评估',
+                            type:'RegressionEval',
+                            isLeaf:true                            
+                        },
+                        {
+                            label:'聚类评估',
+                            type:'ClusterEval',
+                            isLeaf:true                            
+                        }                         
                     ]                    
                 },{
                     label:'测试用',
@@ -354,6 +518,14 @@ export default {
                             isLeaf: true                                
                         }
                     ]
+=======
+                        },{
+                            label:'回归评估',
+                            type:'RegressionEval',
+                            isLeaf:true                            
+                        }                        
+                    ]                    
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                 }
                 ]            
             };
@@ -484,7 +656,6 @@ export default {
 
             param.value.splice(index, 1)
             console.log(param)
-
         }        
 
 

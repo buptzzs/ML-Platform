@@ -14,16 +14,16 @@ import com.example.admin.service.RunUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class KMeans extends AlComponent {
+public class SpectralClustering extends AlComponent {
 
-    private static String pyFile = "kMeans.py";
+    private static String pyFile = "spectralClustering.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public KMeans() {
+    public SpectralClustering() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "KMeans";
+        name = "SpectralClustering";
     }
 
     @Override
@@ -52,14 +52,11 @@ public class KMeans extends AlComponent {
     private class FileParams extends Params {
         FileParams() {
             setParam("train", "True");
-            setParam("model_name", "kmeans_test");
+            setParam("model_name", "SC_test");
             setParam("model","");
-            setParam("n_clusters", "0");
-<<<<<<< HEAD
+            setParam("n_clusters", "8");
             setParam("n_int", "10");
-            setParam("max_iter", "300");
-=======
->>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+            setParam("gamma", "1.0");
         }
     }
 

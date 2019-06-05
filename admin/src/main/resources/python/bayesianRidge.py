@@ -1,6 +1,6 @@
 import pickle
-from sklearn import svm
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.naive_bayes import ComplementNB
+from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import ShuffleSplit
 
-model = 'svm'
+model = 'naive_bayes'
 
 
 def main(args):
@@ -20,11 +20,14 @@ def main(args):
     print('load data from'+data_path)
     
     data = pickle.load(open(data_path, 'rb'))
+<<<<<<< HEAD
     out_path = os.path.join(data_dir, args.outFileName+'.csv')
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        clf = svm.SVR(kernel=args.kernel,C=args.C,coef0=args.coef0)
+        clf = ComplementNB(n_iter=args.n_iter,compute_score=args.compute_score)
 
         assert 'target' in data
 
@@ -43,10 +46,8 @@ def main(args):
         clf.fit(x_train, y_train)
         y_pred = clf.predict(x_test)
 
-
-        # The mean squared error
-        print("Mean squared error: %.2f"
-            % mean_squared_error(y_test, y_pred))
+        # The accuracy
+        print('Accuracy: \n',accuracy_score(y_test, y_pred))
         df = pd.DataFrame({
             'pred': y_pred,
             'target': y_test,
@@ -55,6 +56,7 @@ def main(args):
         df.to_csv(out_path)
         print("Some results of validation:")
         print(df.head())
+
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(clf, model_path)
     else:
@@ -81,10 +83,8 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
-    parser.add_argument('--kernel', type=str, default='rbf')
-    parser.add_argument('--C', type=float, default=1.0)
-    parser.add_argument('--coef0', type=float, default=0.0)
-
+    parser.add_argument('--n_iter', type=int, default=300)
+    parser.add_argument('--compute_score', type=bool, default=False)
 
     args = parser.parse_args()
     print(args)

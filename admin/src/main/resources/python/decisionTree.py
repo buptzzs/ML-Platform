@@ -1,14 +1,13 @@
 import pickle
-from sklearn import svm
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn import tree
+from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import ShuffleSplit
-
-model = 'svm'
+model = 'tree'
 
 
 def main(args):
@@ -24,14 +23,14 @@ def main(args):
     assert 'data' in data
     if args.train:
         ratio = args.ratio
-        clf = svm.SVR(kernel=args.kernel,C=args.C,coef0=args.coef0)
+        regr = tree.DecisionTreeClassifier(min_samples_split=args.min_samples_split,min_samples_leaf=args.min_samples_leaf)
 
         assert 'target' in data
 
         features = data['data']
         labels = data['target']
 
-        rs = ShuffleSplit(n_splits=1, test_size=ratio)
+       rs = ShuffleSplit(n_splits=1, test_size=ratio)
         train_index, val_index = next(rs.split(features, labels))
 
         x_train = features[train_index]
@@ -40,13 +39,11 @@ def main(args):
         y_train = labels[train_index]
         y_test = labels[val_index]
 
-        clf.fit(x_train, y_train)
-        y_pred = clf.predict(x_test)
+        regr.fit(x_train, y_train)
+        y_pred = regr.predict(x_test)
 
-
-        # The mean squared error
-        print("Mean squared error: %.2f"
-            % mean_squared_error(y_test, y_pred))
+        # The accuracy
+        print('Accuracy: \n',accuracy_score(y_test, y_pred))
         df = pd.DataFrame({
             'pred': y_pred,
             'target': y_test,
@@ -55,8 +52,9 @@ def main(args):
         df.to_csv(out_path)
         print("Some results of validation:")
         print(df.head())
+
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
-        dump(clf, model_path)
+        dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
         model_path = os.path.join(model_dir,args.model_path)
@@ -80,11 +78,11 @@ if __name__ == '__main__':
     parser.add_argument('--ratio', type=float, default=0.2)
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
+    
 
-    parser.add_argument('--kernel', type=str, default='rbf')
-    parser.add_argument('--C', type=float, default=1.0)
-    parser.add_argument('--coef0', type=float, default=0.0)
-
+    parser.add_argument('--min_samples_split', type=float,default=2)
+    parser.add_argument('--min_samples_leaf', type=float,default=1)
+    
 
     args = parser.parse_args()
     print(args)

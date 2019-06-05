@@ -14,16 +14,16 @@ import com.example.admin.service.RunUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class KMeans extends AlComponent {
+public class MeanShift extends AlComponent {
 
-    private static String pyFile = "kMeans.py";
+    private static String pyFile = "meanShift.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public KMeans() {
+    public MeanShift() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "KMeans";
+        name = "MeanShift";
     }
 
     @Override
@@ -52,14 +52,11 @@ public class KMeans extends AlComponent {
     private class FileParams extends Params {
         FileParams() {
             setParam("train", "True");
-            setParam("model_name", "kmeans_test");
+            setParam("model_name", "meanshift_test");
             setParam("model","");
-            setParam("n_clusters", "0");
-<<<<<<< HEAD
-            setParam("n_int", "10");
-            setParam("max_iter", "300");
-=======
->>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+            setParam("bin_seeding", "False");
+            setParam("min_bin_freq", "1");
+            setParam("cluster_all", "True");
         }
     }
 
