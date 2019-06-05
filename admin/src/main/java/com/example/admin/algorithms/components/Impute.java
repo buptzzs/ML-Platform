@@ -9,8 +9,11 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
+<<<<<<< HEAD
 import org.json.JSONArray;
 
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,12 +38,25 @@ public class Impute extends AlComponent {
     @Override
     public RunResult run(String root, String inFile, String outFile) {
         List<String> sParams = new ArrayList<String>();
+<<<<<<< HEAD
         String strategys = params.getParam("strategy"); // [['',''],['','']]
 
         System.out.println(strategys);
         sParams.add("--strategy");
         sParams.add(strategys);
 
+=======
+        for (String key : params.getParams().keySet()) {
+            String value = params.getParam(key);
+            if (value.length() == 0) {
+                continue;
+            }
+            log.info(key);
+            log.info(value);
+            sParams.add("--" + key);
+            sParams.add(value);
+        }
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
         sParams.add("--inFile");
         sParams.add(inFile);
         sParams.add("--outFileName");

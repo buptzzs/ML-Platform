@@ -19,15 +19,26 @@ def main(args):
         raise "不支持的文件类型，仅支持csv,json"
 
     cols = list(df.columns)
+<<<<<<< HEAD
     print(cols)
     if args.label_col.strip() not in cols:
+=======
+
+    if args.label_col not in cols:
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
         print(f'label列{args.label_col},不存在，将被忽略')
         feature_cols = cols
         label_col = None
     else:
+<<<<<<< HEAD
         label_col = args.label_col.strip()
         print(f'label column:{label_col}')
         cols.remove(label_col)
+=======
+        label_col = args.label_col
+        print(f'label column:{label_col}')
+        cols.remove(args.label_col)
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
         feature_cols = cols
 
     data = []

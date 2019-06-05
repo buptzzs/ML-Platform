@@ -4,13 +4,27 @@ from sklearn.metrics import accuracy_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
+<<<<<<< HEAD
+<<<<<<<< HEAD:admin/src/main/resources/python/SGDRegressor.py
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import ShuffleSplit
 
+<<<<<<< HEAD
+========
+from sklearn.datasets import load_boston
+>>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f:admin/src/main/resources/python/linear_regression.py
 model = 'linear_model'
 
 
+    
+=======
+model = 'linear_model'
+
+
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
 def main(args):
     model_name = args.model_name
     model_dir = os.path.join(args.root, "model")  # get model dir
@@ -18,11 +32,26 @@ def main(args):
 
     data_path = os.path.join(data_dir, args.inFile)
     print('load data from'+data_path)
+<<<<<<< HEAD
+<<<<<<<< HEAD:admin/src/main/resources/python/SGDRegressor.py
     
     data = pickle.load(open(data_path, 'rb'))
     out_path = os.path.join(data_dir, args.outFileName+'.csv')
     assert 'data' in data
     if args.train:
+========
+    da,target = load_boston(return_X_y=True)
+    data = {'data':da,'target':target}
+    #data = pickle.load(open(data_path, 'rb'))
+    assert 'data' in data
+    if args.train :
+>>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f:admin/src/main/resources/python/linear_regression.py
+=======
+    
+    data = pickle.load(open(data_path, 'rb'))
+    assert 'data' in data
+    if args.train:
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
         ratio = args.ratio
         regr = linear_model.SGDRegressor(max_iter=args.max_iter,fit_intercept=args.fit_intercept)
 
@@ -70,17 +99,34 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
 
+<<<<<<< HEAD
+    parser.add_argument('--inFile', type=str, default='a',help='input file path')
+    parser.add_argument('--outFileName', type=str,default='b', help="output file's name")
+    parser.add_argument('--root', type=str, default='/Users/raochengkai/Documents/ML-Platform-master/admin/src/main/resources/files/admin',help="file root")
+
+    parser.add_argument('--train', type=bool, default=True)
+    parser.add_argument('--ratio', type=float, default=0.2)
+<<<<<<<< HEAD:admin/src/main/resources/python/SGDRegressor.py
+=======
     parser.add_argument('--inFile', type=str, help='input file path')
     parser.add_argument('--outFileName', type=str, help="output file's name")
     parser.add_argument('--root', type=str, help="file root")
 
     parser.add_argument('--train', type=bool, default=True)
     parser.add_argument('--ratio', type=float, default=0.2)
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
     parser.add_argument('--max_iter', type=int, default=100)
     parser.add_argument('--fit_intercept', type=bool, default=True)
+<<<<<<< HEAD
+========
+    parser.add_argument('--model_name', type=str,default='c')
+    parser.add_argument('--model', type=str,default='')
+>>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f:admin/src/main/resources/python/linear_regression.py
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
 
 
     args = parser.parse_args()

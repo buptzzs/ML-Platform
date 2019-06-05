@@ -20,6 +20,7 @@ def main(args):
     else:
         df = pd.read_csv(file_path, sep=',')
 
+<<<<<<< HEAD
     print('****Read file done! data head****')
     print(df.head())
 
@@ -29,6 +30,11 @@ def main(args):
     print("*****Data describe****")
     print(df.describe())
 
+=======
+    print('read file done! data head:')
+    print(df.head())
+
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 

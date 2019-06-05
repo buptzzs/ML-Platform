@@ -20,7 +20,10 @@ def main(args):
     print('load data from'+data_path)
     
     data = pickle.load(open(data_path, 'rb'))
+<<<<<<< HEAD
     out_path = os.path.join(data_dir, args.outFileName+'.csv')
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
     assert 'data' in data
     if args.train:
         ratio = args.ratio

@@ -80,7 +80,11 @@ if __name__ == '__main__':
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
+<<<<<<< HEAD
     parser.add_argument('--kernel', type=str, default='rbf')
+=======
+    parser.add_argument('--m', type=str, default='rbf')
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
     parser.add_argument('--C', type=float, default=1.0)
     parser.add_argument('--coef0', type=float, default=0.0)
 

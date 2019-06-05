@@ -23,12 +23,17 @@ def main(args):
     assert 'data' in data
     if args.train:
         k = args.n_clusters
+<<<<<<< HEAD
         regr = cluster.KMeans(n_clusters=k, random_state='random_state',n_init = args.n_init,max_iter=args.max_iter)
+=======
+        regr = cluster.KMeans(n_clusters=k, random_state='random_state')
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
 
 
         features = data['data']
 
         pred = regr.fit_predict(features)
+<<<<<<< HEAD
 
         df = pd.DataFrame({
             'pred': pred,
@@ -38,6 +43,8 @@ def main(args):
         df.to_csv(out_path)
         print("Some results of validation:")
         print(df.head())
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
         
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(regr, model_path)
@@ -64,8 +71,12 @@ if __name__ == '__main__':
     parser.add_argument('--model_path', type=str)
 
     parser.add_argument('--n_clusters', type=int, default=0)
+<<<<<<< HEAD
     parser.add_argument('--n_int', type=int, default=10)
     parser.add_argument('--max_iter', type=int, default=300)
+=======
+
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
     args = parser.parse_args()
     print(args)
 
