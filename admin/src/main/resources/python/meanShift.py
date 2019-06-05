@@ -1,10 +1,13 @@
 import pickle
-from sklearn import tree
-from sklearn.metrics import accuracy_score
+from sklearn import cluster
+from sklearn.metrics import adjusted_rand_score
 from sklearn.externals.joblib import dump, load
 import argparse
 import os
-model = 'tree'
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import ShuffleSplit
+model = 'cluster'
 
 
 def main(args):
@@ -14,42 +17,39 @@ def main(args):
 
     data_path = os.path.join(data_dir, args.inFile)
     print('load data from'+data_path)
-    #data_path = 'diabetes.dataset'
+
     data = pickle.load(open(data_path, 'rb'))
+    out_path = os.path.join(data_dir, args.outFileName+'.csv')
     assert 'data' in data
     if args.train:
-        ratio = args.ratio
-        regr = tree.DecisionTreeClassifier()
+        regr = cluster.MeanShift(bin_seeding=args.bin_seeding,min_bin_freq = args.min_bin_freq,cluster_all=args.cluster_all)
 
-        assert 'target' in data
 
         features = data['data']
-        labels = data['target']
 
-        ratio_num = int(features.shape[0] * ratio)
-        x_train = features[ratio_num:]
-        x_test = features[:ratio_num]
+        pred = regr.fit_predict(features)
 
-        y_train = labels[ratio_num:]
-        y_test = labels[:ratio_num]
-
-        regr.fit(x_train, y_train)
-        y_pred = regr.predict(x_test)
-
-        # The accuracy
-        print('Accuracy: \n',accuracy_score(y_test, y_pred))
-    
-
+        df = pd.DataFrame({
+            'pred': pred,
+            'target': features,
+        })
+        print(f'validation results save to:{args.outFileName}.csv')
+        df.to_csv(out_path)
+        print("Some results of validation:")
+        print(df.head())
+        
         model_path = os.path.join(model_dir,f'{model_name}_{model}.model')
         dump(regr, model_path)
     else:
         # TODO: How to Save the prediction?
         model_path = os.path.join(model_dir,args.model_path)
-        regr = load(args.model)
+        clf = load(args.model)
         x = data['data']
-        pred = regr.predict(x)
-        out_path = os.path.join(data_dir, args.outFileName)
-        print(pred)
+        pred = clf.predict(x)
+        df = pd.DataFrame({
+            'pred': pred,
+        })        
+        df.to_csv(out_path)
 
 if __name__ == '__main__':
 
@@ -58,13 +58,13 @@ if __name__ == '__main__':
     parser.add_argument('--inFile', type=str, help='input file path')
     parser.add_argument('--outFileName', type=str, help="output file's name")
     parser.add_argument('--root', type=str, help="file root")
-
     parser.add_argument('--train', type=bool, default=True)
-    parser.add_argument('--ratio', type=float, default=0.2)
     parser.add_argument('--model_name', type=str)
     parser.add_argument('--model_path', type=str)
 
-
+    parser.add_argument('--bin_seeding', type=bool, default=False)
+    parser.add_argument('--min_bin_freq', type=int, default=1)
+    parser.add_argument('--cluster_all', type=bool, default=True)
     args = parser.parse_args()
     print(args)
 

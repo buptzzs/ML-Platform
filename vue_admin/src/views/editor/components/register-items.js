@@ -99,15 +99,201 @@ Flow.registerNode('k-means', {
             value: 'false',
             type:'bool'
         }, {
-            name: 'n_clusters',
-            value: '0',
-        }, {
             name: 'model_name',
             value: 'kmeans_test',
+            type:'str'
         },
         {
             name: 'model',
             value: '',
+            type:'model'
+        },{
+            name: 'n_clusters',
+            value: '0',
+            type:'str'
+        },{
+            name: 'n_int',
+            value: '10',
+            type:'str'
+        },{
+            name: 'max_iter',
+            value: '300',
+            type:'str'
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('MeanShift', {
+    label: '均值漂移',
+    color_type: '#1890FF',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }], // 上面边的中点
+        [ 0.5, 1, {
+            type: 'output'
+        }] // 下边边的中点
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'model_name',
+            value: 'kmeans_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'bin_seeding',
+            value: 'false',
+            type:'bool'
+        },{
+            name: 'min_bin_freq',
+            value: '1',
+            type:'str'
+        },{
+            name: 'cluster_all',
+            value: 'true',
+            type:'bool'
+        },
+    ]
+}, 'model-card');
+Flow.registerNode('SpectralClustering', {
+    label: '谱聚类',
+    color_type: '#1890FF',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }], // 上面边的中点
+        [ 0.5, 1, {
+            type: 'output'
+        }] // 下边边的中点
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'model_name',
+            value: 'kmeans_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'n_clusters',
+            value: '8',
+            type:'str'
+        },{
+            name: 'n_int',
+            value: '10',
+            type:'str'
+        },{
+            name: 'gamma',
+            value: '1.0',
+            type:'str'
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('GaussianMixture', {
+    label: '高斯混合模型',
+    color_type: '#1890FF',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }], // 上面边的中点
+        [ 0.5, 1, {
+            type: 'output'
+        }] // 下边边的中点
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'model_name',
+            value: 'kmeans_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'n_components',
+            value: '1',
+            type:'str'
+        },{
+            name: 'n_int',
+            value: '1',
+            type:'str'
+        },{
+            name: 'max_iter',
+            value: '100',
+            type:'str'
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('Brich', {
+    label: 'Brich聚类',
+    color_type: '#1890FF',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }], // 上面边的中点
+        [ 0.5, 1, {
+            type: 'output'
+        }] // 下边边的中点
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'model_name',
+            value: 'kmeans_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'threshold',
+            value: '0.5',
+            type:'str'
+        },{
+            name: 'branching_factor',
+            value: '50',
+            type:'str'
+        },{
+            name: 'n_clusters',
+            value: '3',
+            type:'str'
         },
     ]
 }, 'model-card');
@@ -219,6 +405,104 @@ Flow.registerNode('RandomForestClassifier', {
     ]
 }, 'model-card');
 
+// 随机森林
+Flow.registerNode('random-forest', {
+    label: '随机森林',
+    color_type: '#9254DE',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }],
+        [ 0.5, 1, {
+            type: 'output'
+        }]
+    ],
+
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type:'str'
+        }, {
+            name: 'model_name',
+            value: 'random_forest_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'n_estimators',
+            value: '10',
+            type:'str'
+        },{
+            name: 'min_samples_split',
+            value: '2',
+            type:'str'
+        },{
+            name: 'min_samples_leaf',
+            value: '1',
+            type:'str'
+        },
+    ]
+}, 'model-card');
+
+Flow.registerNode('random-forest-re', {
+    label: '随机森林',
+    color_type: '#9254DE',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }],
+        [ 0.5, 1, {
+            type: 'output'
+        }]
+    ],
+
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type:'str'
+        }, {
+            name: 'model_name',
+            value: 'random_forest_re_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'n_estimators',
+            value: '10',
+            type:'str'
+        },{
+            name: 'min_samples_split',
+            value: '2',
+            type:'str'
+        },{
+            name: 'min_samples_leaf',
+            value: '1',
+            type:'str'
+        },
+    ]
+}, 'model-card');
 
 // 朴素贝叶斯
 Flow.registerNode('Bayes', {
@@ -253,10 +537,65 @@ Flow.registerNode('Bayes', {
             name: 'model',
             value: '',
             type:'model'
+        },{
+            name: 'alpha',
+            value: '1.0',
+            type:'str'
+        },{
+            name: 'fit_prior',
+            value: 'true',
+            type:'bool'
+        },{
+            name: 'norm',
+            value: 'false',
+            type:'bool'
+        },
+
+    ]
+}, 'model-card');
+Flow.registerNode('BayesianRidge', {
+    label: '贝叶斯线性回归',
+    color_type: '#6495ED',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/uZVdwjJGqDooqKLKtvGA.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 0, {
+            type: 'input'
+        }],
+        [ 0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type:'str',
+        }, {
+            name: 'model_name',
+            value: 'BayesianRidge_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },{
+            name: 'n_iter',
+            value: '300',
+            type:'str'
+        },{
+            name: 'compute_score',
+            value: 'false',
+            type:'bool'
         },
     ]
 }, 'model-card');
-
 // 读数据表
 Flow.registerNode('FileComponent', {
     label: '数据格式转换',
@@ -310,15 +649,18 @@ Flow.registerNode('SupportVectorMachine', {
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
     // 设置锚点
     anchor: [
-        [0.5, 1, {
+        [ 0.5, 1, {
             type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
         }]
     ],
     params: [
         {
             name: 'train',
             value: 'false',
-            type:'str'
+            type:'bool'
         }, {
             name: 'ratio',
             value: '0.2',
@@ -333,6 +675,20 @@ Flow.registerNode('SupportVectorMachine', {
             value: '',
             type:'model'
         },
+        {
+            name: 'kernel',
+            value: 'rbf',
+            type:'str'
+        }, {
+            name: 'C',
+            value: '1.0',
+            type:'str'
+        },
+        {
+            name: 'coef0',
+            value: '0.0',
+            type:'str'
+        },
     ]
 }, 'model-card');
 
@@ -343,8 +699,11 @@ Flow.registerNode('SupportVectorRegression', {
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
     // 设置锚点
     anchor: [
-        [0.5, 1, {
+        [ 0.5, 1, {
             type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
         }]
     ],
     params: [
@@ -365,6 +724,19 @@ Flow.registerNode('SupportVectorRegression', {
             name: 'model',
             value: '',
             type: 'model'
+        },{
+            name: 'kernel',
+            value: 'rbf',
+            type:'str'
+        }, {
+            name: 'C',
+            value: '1.0',
+            type:'str'
+        },
+        {
+            name: 'coef0',
+            value: '0.0',
+            type:'str'
         },
 
     ]
@@ -414,8 +786,11 @@ Flow.registerNode('DecisionTree', {
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
     // 设置锚点
     anchor: [
-        [0.5, 1, {
+        [ 0.5, 1, {
             type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
         }]
     ],
     params: [
@@ -436,6 +811,59 @@ Flow.registerNode('DecisionTree', {
             name: 'model',
             value: '',
             type:'model'
+        },{
+            name: 'min_samples_split',
+            value: '2',
+            type:'str'
+        },{
+            name: 'min_samples_leaf',
+            value: '1',
+            type:'str'
+        },
+
+    ]
+}, 'model-card');
+Flow.registerNode('DecisionTreeRe', {
+    label: '决策树',
+    color_type: '#1C1C1C',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [ 0.5, 1, {
+            type: 'output'
+        }],
+        [0.5, 0, {
+            type: 'input'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type:'bool'            
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type:'str'
+        }, {
+            name: 'model_name',
+            value: 'decision_tree_re_test',
+            type:'str'
+        },
+        {
+            name: 'model',
+            value: '',
+            type:'model'
+        },
+        {
+            name: 'min_samples_split',
+            value: '2',
+            type:'str'
+        },{
+            name: 'min_samples_leaf',
+            value: '1',
+            type:'str'
         },
 
     ]
@@ -496,45 +924,44 @@ Flow.registerNode('ClassificationEval', {
     ]
 }, 'model-card');
 
-Flow.registerNode('LogisticRegression', {
-    label: '逻辑回归',
-    color_type: '#FFFF00',
+Flow.registerNode('RegressionEval', {
+    label: '回归评估',
+    color_type: '#1C1C1C',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
     // 设置锚点
     anchor: [
-        [0.5, 1, {
-            type: 'output'
-        }],
         [0.5, 0, {
             type: 'input'
-        }]        
+        }],
+
     ],
     params: [
         {
-            name: 'train',
-            value: 'false',
-            type:'bool'
-        }, {
-            name: 'ratio',
-            value: '0.2',
-            type: 'str'
-        },{
-            name: 'max_iter',
-            value: '10',
-            type: 'str'
-        }, 
-        {
-            name: 'model_name',
-            value: 'logistic_regression_test',
-            type:'str'
-        },
-        {
-            name: 'model',
-            value: '',
-            type: 'model'
-        },
+            name: 'txt_report',
+            value: 'true',
+            type: 'bool'
+        }
+    ]
+}, 'model-card');
+Flow.registerNode('ClusterEval', {
+    label: '聚类评估',
+    color_type: '#1C1C1C',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 0, {
+            type: 'input'
+        }],
 
+    ],
+    params: [
+        {
+            name: 'txt_report',
+            value: 'true',
+            type: 'bool'
+        }
     ]
 }, 'model-card');
 
@@ -775,7 +1202,7 @@ Flow.registerNode('DeleteColumn', {
 
 
 Flow.registerNode('KNearestNeighbor', {
-    label: 'K最近邻',
+    label: 'K近邻',
     color_type: '#9ACD32',
     type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
     state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
@@ -805,6 +1232,321 @@ Flow.registerNode('KNearestNeighbor', {
             name: 'model',
             value: '',
             type: 'model'
+        },{
+            name: 'n_neighbors',
+            value: '5',
+            type: 'str'
+        },{
+            name: 'leaf_size',
+            value: '30',
+            type: 'str'
+        },{
+            name: 'p',
+            value: '2',
+            type: 'str'
+        },
+
+    ]
+}, 'model-card');
+Flow.registerNode('KNearestNeighborRe', {
+    label: 'K近邻',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+            tip:'验证集所占比例'
+        }, {
+            name: 'model_name',
+            value: 'KNearestNeighbor_re_test',
+            type: 'str',
+            tip:'训练保存的模型名称'
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        },{
+            name: 'n_neighbors',
+            value: '5',
+            type: 'str'
+        },{
+            name: 'leaf_size',
+            value: '30',
+            type: 'str'
+        },{
+            name: 'p',
+            value: '2',
+            type: 'str'
+        },
+
+    ]
+}, 'model-card');
+
+Flow.registerNode('AdaBoost', {
+    label: 'AdaBoost',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+        }, {
+            name: 'model_name',
+            value: 'AdaBoost_test',
+            type: 'str',
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        },
+        {
+            name: 'n_estimators',
+            value: '50',
+            type: 'str',
+        },{
+            name: 'learning_rate',
+            value: '1.0',
+            type: 'str',
+        },
+
+
+    ]
+}, 'model-card');
+
+Flow.registerNode('AdaBoostRe', {
+    label: 'AdaBoost',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+        }, {
+            name: 'model_name',
+            value: 'AdaBoost_re_test',
+            type: 'str',
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        }, {
+            name: 'n_estimators',
+            value: '50',
+            type: 'str',
+        },{
+            name: 'learning_rate',
+            value: '1.0',
+            type: 'str',
+        },
+
+    ]
+}, 'model-card');
+
+Flow.registerNode('GradientBoosting', {
+    label: '梯度提升树',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+        }, {
+            name: 'model_name',
+            value: 'GradientBoosting_test',
+            type: 'str',
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        },
+        {
+            name: 'n_estimators',
+            value: '100',
+            type: 'str',
+        },{
+            name: 'learning_rate',
+            value: '0.1',
+            type: 'str',
+        },
+    ]
+}, 'model-card');
+Flow.registerNode('GradientBoostingRe', {
+    label: '梯度提升树',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+        }, {
+            name: 'model_name',
+            value: 'GradientBoosting_re_test',
+            type: 'str',
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        }, {
+            name: 'n_estimators',
+            value: '100',
+            type: 'str',
+        },{
+            name: 'learning_rate',
+            value: '0.1',
+            type: 'str',
+        },
+
+    ]
+}, 'model-card');
+
+Flow.registerNode('SGDRegressor', {
+    label: '随机梯度下降',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+        }, {
+            name: 'model_name',
+            value: 'SGDRegressor_test',
+            type: 'str',
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        },
+        {
+            name: 'max_iter',
+            value: '100',
+            type: 'str',
+        },
+        {
+            name: 'fit_intercept',
+            value: 'true',
+            type: 'bool',
+        },
+    ]
+}, 'model-card');
+Flow.registerNode('SGDClassifier', {
+    label: '随机梯度下降',
+    color_type: '#9ACD32',
+    type_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg',
+    state_icon_url: 'https://gw.alipayobjects.com/zos/rmsportal/MXXetJAxlqrbisIuZxDO.svg',
+    // 设置锚点
+    anchor: [
+        [0.5, 1, {
+            type: 'output'
+        }]
+    ],
+    params: [
+        {
+            name: 'train',
+            value: 'false',
+            type: 'bool'
+        }, {
+            name: 'ratio',
+            value: '0.2',
+            type: 'str',
+            tip:'验证集所占比例'
+        }, {
+            name: 'model_name',
+            value: 'SGDClassifier_test',
+            type: 'str',
+            tip:'训练保存的模型名称'
+        },
+        {
+            name: 'model',
+            value: '',
+            type: 'model'
+        },{
+            name: 'max_iter',
+            value: '100',
+            type: 'str',
+        },
+        {
+            name: 'fit_intercept',
+            value: 'true',
+            type: 'bool',
         },
 
     ]

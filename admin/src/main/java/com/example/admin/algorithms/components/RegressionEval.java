@@ -9,21 +9,19 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Bayes extends AlComponent {
+public class RegressionEval extends AlComponent {
 
-    private static String pyFile = "bayes.py";
+    private static String pyFile = "regression_metrics.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public Bayes() {
+    public RegressionEval() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "Bayes";
+        name = "RegressionEval";
     }
 
     @Override
@@ -31,7 +29,7 @@ public class Bayes extends AlComponent {
         List<String> sParams = new ArrayList<String>();
         for (String key : params.getParams().keySet()) {
             String value = params.getParam(key);
-            if(value.length() == 0){
+            if (value.length() == 0) {
                 continue;
             }
             log.info(key);
@@ -52,14 +50,8 @@ public class Bayes extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "True");
-            setParam("ratio", "0.2");
-            setParam("model_name", "_test");
-            setParam("model","");
-            setParam("alpha", "1.0");
-            setParam("fit_prior", "True");
-            setParam("norm","False");
-            
+            setParam("txt_report", "true");
+
         }
     }
 

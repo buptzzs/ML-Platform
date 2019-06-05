@@ -9,9 +9,7 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,15 +47,16 @@ public class KMeans extends AlComponent {
         sParams.add(root);
         RunResult result = runUtil.runPython(pyFile, sParams);
         return result;
-
     }
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "False");
-            setParam("n_clusters", "0");
+            setParam("train", "True");
             setParam("model_name", "kmeans_test");
             setParam("model","");
+            setParam("n_clusters", "0");
+            setParam("n_int", "10");
+            setParam("max_iter", "300");
         }
     }
 

@@ -10,20 +10,19 @@ import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
 
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Bayes extends AlComponent {
+public class SGDClassifier extends AlComponent {
 
-    private static String pyFile = "bayes.py";
+    private static String pyFile = "SGDClassifier.py";
 
     private RunUtil runUtil = new RunUtil();
 
-    public Bayes() {
+    public SGDClassifier() {
         params = new FileParams();
         type = ComponentType.LOCAL_PYTHON;
-        name = "Bayes";
+        name = "SGDClassifier";
     }
 
     @Override
@@ -52,13 +51,13 @@ public class Bayes extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "True");
+            setParam("train", "False");
             setParam("ratio", "0.2");
-            setParam("model_name", "_test");
+            setParam("model_name", "logistic_test");
             setParam("model","");
-            setParam("alpha", "1.0");
-            setParam("fit_prior", "True");
-            setParam("norm","False");
+
+            setParam("max_iter","100");
+            setParam("fit_intercept","True");
             
         }
     }

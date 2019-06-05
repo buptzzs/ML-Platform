@@ -299,10 +299,28 @@ export default {
                             isLeaf:true                                  
                         },
                         {
-                            label:'K最近邻',
+                            label:'K最近邻分类器',
                             type:'KNearestNeighbor',
                             isLeaf:true
-                        }                        
+                        },{
+                            label:'决策树分类器',
+                            type:'DecisionTree',
+                            isLeaf:true
+                        },{
+                            label:'AdaBoost分类器',
+                            type:'AdaBoost',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'梯度提升树分类器',
+                            type:'GradientBoosting',
+                            isLeaf:true
+                        },
+                        {
+                            label:'随机梯度下降分类器',
+                            type:'SGDClassifier',
+                            isLeaf:true
+                        }                          
                     ]
                 }, {
                     label: '聚类算法',
@@ -312,6 +330,22 @@ export default {
                             label:'k均值聚类',
                             type:'k-means',
                             isLeaf:true
+                        },{
+                            label:'均值漂移',
+                            type:'MeanShift',
+                            isLeaf:true
+                        },{
+                            label:'谱聚类',
+                            type:'SpectralClustering',
+                            isLeaf:true
+                        },{
+                            label:'高斯混合模型',
+                            type:'GaussianMixture',
+                            isLeaf:true
+                        },{
+                            label:'BIRCH聚类',
+                            type:'Brich',
+                            isLeaf:true
                         }
                     ]
                 },{
@@ -319,14 +353,47 @@ export default {
                     type:'Regression',
                     children:[
                         {
+                            label:'线性回归',
+                            type:'LinearRegression',
+                            isLeaf:true
+                        },
+                        {
                             label:'支持向量机回归',
                             type:'SupportVectorRegression',
                             isLeaf:true                            
                         },
                         {
-                            label:'决策树',
-                            type:'DecisionTree',
-                            isLeaf:true                            
+                            label:'贝叶斯线性回归',
+                            type:'BayesianRidge',
+                            isLeaf:true                               
+                        },{
+                            label:'随机森林回归',
+                            type:'random-forest-re',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'K近邻回归',
+                            type:'KNearestNeighborRe',
+                            isLeaf:true
+                        },
+                        {
+                            label:'决策树回归',
+                            type:'DecisionTreeRe',
+                            isLeaf:true
+                        }, {
+                            label:'AdaBoost回归',
+                            type:'AdaBoostRe',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'梯度提升树回归',
+                            type:'GradientBoostingRe',
+                            isLeaf:true
+                        },
+                        {
+                            label:'随机梯度下降回归',
+                            type:'SGDRegressor',
+                            isLeaf:true
                         }                        
                     ]                    
                 },{
@@ -338,11 +405,21 @@ export default {
                             type:'BiClassificationEval',
                             isLeaf:true                            
                         },
-                     {
+                        {
                             label:'多分类评估',
                             type:'ClassificationEval',
                             isLeaf:true                            
-                        }                        
+                        },
+                        {
+                            label:'回归评估',
+                            type:'RegressionEval',
+                            isLeaf:true                            
+                        },
+                        {
+                            label:'聚类评估',
+                            type:'ClusterEval',
+                            isLeaf:true                            
+                        }                         
                     ]                    
                 },{
                     label:'测试用',
@@ -484,7 +561,6 @@ export default {
 
             param.value.splice(index, 1)
             console.log(param)
-
         }        
 
 
