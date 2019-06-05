@@ -2,7 +2,8 @@
     <el-container> 
         <el-header> 
             <h3 v-if="type == 'data'" > 数据文件管理 </h3>
-            <h3 v-else> 模型文件管理</h3>
+            <h3 v-else-if="type == 'model'"> 模型文件管理</h3>
+            <h3 v-else>评估结果文件</h3>
         </el-header>
 
         <el-main>
@@ -12,7 +13,7 @@
             </el-col>
             <el-col :span="5" :offset="4">
                 <el-input 
-                    placeholder="请输入文件名"
+                    placeholder="请输入文件名进行搜索"
                     suffix-icon="el-icon-search"
                     v-model="filters[0].value">
                 </el-input>
@@ -48,28 +49,42 @@
                 <el-button type="primary" @click="dialogUpload = false">退出</el-button>
             </div>
         </el-dialog>        
+
+        <el-dialog title="预览信息" :visible.sync="previewVisible"> 
+            <el-row>
+                <ve-line v-if="preview_type=='json'"  :data="preview_chart" :settings="chartSettings"></ve-line>
+                <div v-else class="divInfo" >{{preview_txt}}</div>            
+            </el-row>
+        </el-dialog>
+
     </el-container>
 
 </template>
 
 <script>
-import {getFileInfos, download, delete_file, upload} from '@/api/file'
+import {getFileInfos, download, delete_file, upload, preview} from '@/api/file'
 
 export default {
     props: ['type'],
 
     data() {
-
+        this.chartSettings = {
+            xAxisType: 'value',
+            area: true
+        }        
         const titles = [{
                 prop: 'name',
                 label: '文件名'
             }, {
                 prop: 'size',
                 label: '文件大小/bytes'
-            }];
+            },{
+                prop:'time',
+                label: '上次修改时间'
+            }
+            ];
 
         return {
-            //tableData: []
             data: [],
             titles: titles,
             layout: 'table, pagination',
@@ -86,28 +101,63 @@ export default {
                 }
             ],
             actionCol: {
-                label: 'Actions',
-                probs: {
-                    align: 'left',
+                label: '操作',
+                props: {
+                    align: 'center',
                 },
-                buttons: [{
+                buttons: [
+                    {
                     props: {
-                        type: 'primary',
+                        //type: 'primary',
+                        icon: 'el-icon-view'
+                    },
+                    handler: row => {
+                        this.preview(row.name)
+                    },
+                    label: '预览' 
+                },                    
+                    {
+                    props: {
+                        //type: 'primary',
                         icon: 'el-icon-download'
                     },
                     handler: row => {
                         this.download_file(row.name)
-                },
-                    label: 'download' 
-                }, {
-                    handler: row  => {
-                        this.delete(row.name)
                     },
-                    label: 'delete'
+                    label: '下载' 
+                }, {
+                    props: {
+                        //type: 'primary',
+                        icon: 'el-icon-delete'
+                    },
+                    handler: row  => {
+                        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+                                this.delete(row.name)
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消删除'
+                                });          
+                                });                        
+                    },
+                    label: '删除'
                 }
                 ]
             },
             dialogUpload: false,
+
+            previewVisible: false,         
+            preview_type: "error",
+            preview_txt: '',
+            preview_chart: {}
 
         }
     },
@@ -129,11 +179,15 @@ export default {
             const index = filename.lastIndexOf(".")
             const ext = filename.substr(index+1)
             const isSupportType = ext == 'json' || ext == 'txt' || ext == 'csv'
-
+            /** 
             if (!isSupportType) {
                 this.$message.error('上传文件只能是json、txt、csv格式')
             }
+            
             return isSupportType
+            */
+            return true;
+            
         },
 
         fetchData() {
@@ -176,6 +230,31 @@ export default {
                 this.fetchData()
             })
         },
+        preview(filename){
+            this.$message(filename)
+            const params = {
+                username: this.$store.getters.name,
+                type: this.type,
+                filename: filename
+            }
+            preview(params).then(response =>{
+                const preview_data = JSON.parse(response.data)
+                this.preview_type = preview_data.type
+                if(this.preview_type=='json'){
+                    let chart_data =  JSON.parse(preview_data.data)
+                    this.preview_chart.columns = chart_data.columns
+                    this.preview_chart.rows = chart_data.rows
+                }
+                else if(this.preview_type=='txt'){
+                    this.preview_txt = preview_data.data
+                }
+                else{
+                    this.preview_txt = "Not support"
+                }
+                this.previewVisible = true                
+            })
+            
+        },        
 
         upload_file(param) {
             let formData = new FormData()
@@ -192,3 +271,9 @@ export default {
 
 }
 </script>
+<style>
+    .divInfo {
+        white-space: pre-line;
+    }
+
+</style>

@@ -1,18 +1,29 @@
-<template>
+<template >
     <el-container> 
         <el-main>
             <el-row>
-                <div style="margin-bottom: 15px;">
+                <el-col :span="20">
                     <el-input v-model="input" placeholder="新建任务名">
-                        <el-button  slot="append" icon="el-icon-plus" v-on:click="addUserTask">
+                        <el-button title="添加" slot="append" icon="el-icon-plus" v-on:click="addUserTask">
                         </el-button>
-                    </el-input>
-                    <el-button   icon="el-icon-refresh" @click="getUserTasks" >
+                    </el-input>  
+                    <el-button  title="刷新" icon="el-icon-refresh" @click="getUserTasks" >                        
                     </el-button>
-                </div>
+                </el-col>
+                    <el-col :span="4">
+                    <el-switch
+                        style="display: block"
+                        v-model="card"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        active-text="卡片式布局"
+                        inactive-text="列表式布局">
+                    </el-switch>
+                </el-col>                
             </el-row>
-            <el-row>
-                <el-col :span="5" v-for="(task, index) in tasks" :key="task.name" :offset="index % 4 == 0 ? 0 : 1">
+            <el-divider></el-divider>            
+            <el-row v-if="card">
+                <el-col :span="6" v-for="(task, index) in tasks" :key="task.name" :offset="index % 3 == 0 ? 0 : 1">
                     <el-card>
                         <div slot="header">
                             <span>{{task.taskname}}</span>
@@ -30,38 +41,107 @@
                             <time class="time">运行终止时间: {{task.runTaskInfo.endTime}}</time>
                         </div>
                         <div class="info">
-                            <div class="state" style="color:#F56C6C">状态: {{task.runTaskInfo.taskState}}</div>
-                        </div>                        
+                            <div class="state" >状态: {{task.runTaskInfo.taskState}}</div>
+                        </div>         
+                        <div>
+                            <el-progress :percentage="task.runResult.percentage" status="" color="rgba(142, 113, 199, 0.7)"></el-progress>
+
+                        </div>               
                         <el-row class="bottom clearfix">
                             <el-button  type="text" icon="el-icon-info" @click="selectLog(index)">日志</el-button>
-                            <el-button type="text" icon="el-icon-setting"  @click="edit(index)" :disabled="isDisable(index)">
-                            配置</el-button>
-                            <el-button type="text" icon="el-icon-caret-right" @click="run(index)" :disabled="isDisable(index)">运行</el-button>
-                            <el-button type="text" icon="el-icon-delete" @click="deleteUserTask(index)" :disabled="isDisable(index)"></el-button>                            
+                            <el-button type="text" icon="el-icon-setting"  @click="edit(index)" :disabled="isRunning(index)">
+                            编辑</el-button>
+                            <el-button type="text"  v-if="! isRunning(index)" icon="el-icon-caret-right" @click="run(index)" >运行</el-button>
+                            <el-button type="text"  v-else icon="el-icon-circle-close" @click="stop(index)" >终止</el-button>
+
+                            <el-button type="text" icon="el-icon-delete" @click="deleteUserTask(index)" :disabled="isRunning(index)">删除</el-button>                            
                         </el-row>
                     </el-card>
                 </el-col>
             </el-row>
+            <el-row v-else>
+                <el-table
+                    :data="tasks"
+                >
+                    <el-table-column
+                        label="任务名"
+                        prop="taskname"
+                        sortable
+                    > 
+                    </el-table-column>
+                    <el-table-column
+                        label="创建时间"
+                        prop="createdTime"
+                        sortable
+                    > 
+                    </el-table-column>
+                    <el-table-column
+                        label="运行起始时间"
+                        prop="runTaskInfo.startTime"
+                        sortable
+                    > 
+                    </el-table-column>           
+                    <el-table-column
+                        label="运行终止时间"
+                        prop="runTaskInfo.endTime"
+                        sortable
+                    > 
+                    </el-table-column>    
+                    <el-table-column
+                        label="状态"
+                        prop="runTaskInfo.taskState"
+                        :filters="[{ text: '成功', value: 'SUCCESS' }, { text: '失败', value: 'FAILED' },{ text: '运行中', value: 'RUNNING' }]"
+                        :filter-method="filterTag"
+                        filter-placement="bottom-end"
+                        > 
+                        <template slot-scope="scope">
+                            <el-tag
+                            :type="show_state(scope.row.runTaskInfo.taskState)"
+                            disable-transitions>{{scope.row.runTaskInfo.taskState}}</el-tag>
+                        </template>                    
+                    </el-table-column>    
+                    <el-table-column label="进度"> 
+                        <template slot-scope="scope">
+                            <el-progress :percentage="scope.row.runResult.percentage" status="" color="rgba(142, 113, 199, 0.7)"></el-progress>
+                        </template>
+                    </el-table-column>    
+                    <el-table-column label="操作"> 
+                         <template slot-scope="scope">
+                            <el-button  type="text" icon="el-icon-info" @click="selectLog(scope.$index)">日志</el-button>
+                            <el-button type="text" icon="el-icon-setting"  @click="edit(scope.$index)" :disabled="isRunning(scope.$index)">编辑</el-button>
+                            <el-button type="text"  v-if="! isRunning(scope.$index)" icon="el-icon-caret-right" @click="run(scope.$index)" >运行</el-button>
+                            <el-button type="text"  v-else icon="el-icon-circle-close" @click="stop(scope.$index)" >终止</el-button>
+                            <el-button type="text" icon="el-icon-delete" @click="deleteUserTask(scope.$index)" :disabled="isRunning(scope.$index)">删除</el-button>                                             
+                        </template>
+                    </el-table-column>                                                                                                                 
+
+                </el-table>
+            </el-row>
         </el-main>
         <el-dialog title="日志信息" :visible.sync="logVisible"> 
+            <p>{{curLog.success == false ? '失败':'成功'}}</p>
+            <el-row>
+            <p>运行信息</p>
             <el-collapse v-model="activeName" :data="curLog" accordion>
-                <el-collapse-item title="运行结果" name="1">
-                    <div class="divInfo">{{curLog.success == false ? '失败':'成功'}}</div>
-                </el-collapse-item>
-                <el-collapse-item title="运行信息" name="2">
-                    <div class="divInfo">{{curLog.runLog}}</div>
-                </el-collapse-item>
-                <el-collapse-item title="错误信息" name="3">
-                    <div class="divInfo">{{curLog.errorLog}}</div>
+                <el-collapse-item v-for="(log, index) in curLog.runLog" :title="curLog.total[index]" :name="index" :key="log">
+                    <div class="divInfo" >{{log}}</div>
                 </el-collapse-item>
             </el-collapse>
+            </el-row>
+            <el-row>
+                <el-collapse v-model="activeName" :data="curLog" accordion >
+                <el-collapse-item title="错误信息" name="3">
+                    <div class="divInfo" >{{curLog.errorLog}}</div>
+                </el-collapse-item>
+                </el-collapse>
+            </el-row>
         </el-dialog>
     </el-container>
 
 </template>
 
 <script>
-import {getTasks, addTask, deleteTask, runTask} from '@/api/userTask'
+import {getTasks, addTask, deleteTask, runTask, stopTask} from '@/api/userTask'
 
 
 export default {
@@ -72,12 +152,29 @@ export default {
             tasks: [],
             activeName: '1',
             input: '',
+            timer:0,
+            card:true,
         }
     },
 
     created() {
         this.getUserTasks()
     },
+    mounted(){
+        if(this.timer){      
+                clearInterval(this.timer)    
+        }else{      
+            this.timer = setInterval(()=>{       
+            // 调用相应的接口，渲染数据        
+            this.getUserTasks()     
+            console.log("get user task")
+            },3000)    
+        }  
+    },
+
+    destroyed(){    
+        clearInterval(this.timer)  
+    },    
 
     methods: {
         getUserTasks() {
@@ -91,7 +188,16 @@ export default {
                     let task_json = JSON.parse(str_tasks[i])
                     task_json.runTaskInfo = JSON.parse(task_json.runTaskInfo)
                     task_json.runResult = JSON.parse(task_json.runResult)
+                    const total = task_json.runResult.total.length
+                    const done = task_json.runResult.runLog.length
+                    if(total == 0){
+                        task_json.runResult['percentage'] = 0
+                    }
+                    else{
+                        task_json.runResult['percentage'] = Math.round((done / total)*100,3)
+                    }                    
                     this.tasks.push(task_json)
+                
                 }
                 console.log(this.tasks)
             })
@@ -126,11 +232,21 @@ export default {
                 username: this.$store.getters.name,
                 taskname: this.tasks[index].taskname
             }
-
-            deleteTask(params).then(response => {
-                this.$message("删除任务成功");
-                this.getUserTasks();
-            })
+             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+                                deleteTask(params).then(response => {
+                                    this.$message("删除任务成功");
+                                    this.getUserTasks();
+                                })
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '已取消删除'
+                                });          
+            });    
 
         },
 
@@ -148,20 +264,59 @@ export default {
                 taskname: this.tasks[index].taskname
             }
 
-
-
-
             runTask(params).then(response => {
                 this.$message("任务提交完毕");
                 this.getUserTasks();
             })
         },
 
-        isDisable(index) {
+        stop(index){
+                this.$confirm('终止任务?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+                        const params = {
+                            username: this.$store.getters.name,
+                            taskname: this.tasks[index].taskname
+                        }
+
+                        stopTask(params).then(response => {
+                            this.$message("任务终止");
+                            this.getUserTasks();
+                        })   
+
+                    }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消'
+                    });          
+                });                                 
+        },
+
+        isRunning(index) {
             const state = this.tasks[index].runTaskInfo.taskState
             const flag = (state == "RUNNING")
             return flag
-        }
+        },      
+
+        show_state(state){
+          if(state == 'SUCCESS'){
+             return 'success'
+          }
+          else if(state == 'FAILED'){
+            return 'info'
+          }
+          else if(state == 'RUNNING'){
+            return 'danger'
+          }
+          return ''
+
+        },
+
+        filterTag(value, row) {
+            return row.runTaskInfo.taskState === value;
+        },
     }
 }
 </script>
@@ -169,7 +324,7 @@ export default {
 <style>
     .time {
         font-size: 13px;
-        color: #999;
+        color: #303133;
     }
 
     .state {
@@ -192,11 +347,18 @@ export default {
         content: "";
     }
 
-    .el-input {
+    .el-row .el-input {
         width: 300px;
     }
 
     .divInfo {
         white-space: pre-line;
     }
+
+    .p {
+        white-space: pre-line;
+
+    }
+
+ 
 </style>

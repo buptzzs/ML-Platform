@@ -9,6 +9,14 @@ export function getFileInfos(params) {
     })
 }
 
+export function preview(params) {
+    return request({
+        url: '/file/preview',
+        method: 'get',
+        params
+    })
+}
+
 export function download(params) {
     return request({
         url: '/file/download',

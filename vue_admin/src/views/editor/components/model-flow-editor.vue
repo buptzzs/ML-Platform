@@ -3,68 +3,42 @@
         <toolbar
             @save="saveData"
             @change-eage="changeEage"/>
-        <div :style="{height:'42px'}"/>
+        <div :style="{height:'50px'}"/>
         <div class="bottom-container">
             <context-menu />
             <div id="itempannel">
-                <ul>
-                    <li
-                        class="getItem"
-                        data-shape="k-means"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>K 均值聚类
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="random-forest"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>随机森林
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="FileComponent"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>数据格式转换
-                    </li>
-                    <li
-                        class="getItem"
-                        data-shape="LinearRegression"
-                        data-type="node"
-                        data-size="170*34">
-                        <span class="pannel-type-icon"/>线性回归
-                    </li>                    
-                </ul>
+                    <el-tree
+                    :data="tree_data"
+                    node-key="type"
+                    :default-expanded-keys="['DataPreprocess']"
+                    :expand-on-click-node="false">
+                    <span class="custom-tree-node" slot-scope="{ node, data }">
+                        <span v-if="!node.isLeaf">{{ node.label }}</span>
+                        <span>
+                            <li v-if="node.isLeaf"
+                                class="getItem"
+                                :data-shape="data.type"
+                                data-type="node"
+                                data-size="170*34">
+                                <span class="pannel-type-icon"/>{{data.label}}
+                            </li>   
+                        </span>
+                    </span>
+                    </el-tree>
             </div>
             <div id="detailpannel">
                 <div
                     id="node_detailpannel"
                     data-status="node-selected"
                     class="pannel">
-                    <div class="pannel-title">模型详情: {{selectedModel.shape}}
+                    <div class="pannel-title">组件详情: {{selectedModel.shape}}
                     </div>
                     <div class="block-container">
+<<<<<<< HEAD
+                        <div v-if="selectedModel && selectedModel.type === 'node' && inputingParams.length <=7" >
+=======
                         <div v-if="selectedModel && selectedModel.type === 'node'" >
-                            <div v-if="selectedModel.shape === 'factory-card'">
-                                <el-form
-                                    label-width="80px"
-                                    label-position="left">
-                                    <el-form-item
-                                        label="名称："
-                                        prop="label">
-                                        <el-input v-model="inputingLabel"/>
-                                    </el-form-item>
-                                    <el-form-item
-                                        label="字体颜色："
-                                        prop="color">
-                                        <el-color-picker
-                                            v-model="color"
-                                            size="mini"/>
-                                    </el-form-item>
-                                </el-form>
-                            </div>
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                             <div >
                                 <el-form label-width="60px">
                                     <el-form-item
@@ -72,20 +46,71 @@
                                         v-bind:key="param.name"
                                         :label="param.name"
                                         >
-                                        <el-input v-model="param.value"/>
+                                        <div v-if="param.type=='bool'">
+                                             <el-radio-group v-model="param.value">
+                                                <el-radio  label='true'/>
+                                                <el-radio label='false'/>
+                                              </el-radio-group>
+                                        </div>
+                                        <div v-else-if="param.type=='model'">
+                                            <el-select v-model="param.value" placeholder="请选择">
+                                                <el-option
+                                                    v-for="file in model_files"
+                                                    :key="file.name"
+                                                    :label="file.name"
+                                                    :value="file.name"
+                                                >
+                                                </el-option>
+                                            </el-select>
+                                        </div>
+                                        <div v-else-if="param.type=='option'">
+                                            <el-select v-model="param.value" placeholder="请选择">
+                                                <el-option
+                                                    v-for="option in param.options"
+                                                    :key="option"
+                                                    :label="option"
+                                                    :value="option"
+                                                >
+                                                </el-option>
+<<<<<<< HEAD
+                                            </el-select>                                            
+                                        </div>    
+                                        <div  v-else-if="param.type=='option_add'">
+                                            <div v-for="(s_param, index) in param.value"
+                                                :key='index'
+                                                :value='s_param'
+                                            >
+                                                <el-input class="param_item" v-model="s_param.column"/>
+                                                <el-select class="param_item"  v-model="s_param.value">
+                                                    <el-option
+                                                        v-for="option in param.options"
+                                                        :key="option"
+                                                        :label="option"
+                                                        :value="option"
+                                                    >
+                                                    </el-option>
+                                                </el-select>
+                                                <el-button @click="add_param(param)" size="small"  circle icon="el-icon-plus"></el-button>
+                                                <el-button @click="delete_param(param, index)" size="small"  circle icon="el-icon-delete"></el-button>                                                
+                                            </div >                                            
+                                        </div>                                                                             
+=======
+                                            </el-select>
+                                        </div>                                        
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                                        <div v-else>
+                                            <el-input v-model="param.value" :placeholder="param.tip"/>
+                                        </div>                                        
                                     </el-form-item>
                                 </el-form>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div
-                    id="node_detailpannel"
-                    data-status="group-selected"
-                    class="pannel">
-                    <div class="pannel-title">群组详情</div>
-                    <div class="block-container">
-                        <el-input v-model="inputingLabel"/>
+<<<<<<< HEAD
+                        <div v-else>
+                            <el-button @click="dialogVisible = true">配置</el-button>
+                        </div>
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
                     </div>
                 </div>
                 <div
@@ -105,6 +130,76 @@
                 @change-zoom="changeZoom" />
             <page />
         </div>
+        <el-dialog
+            :title="selectedModel.shape"
+            :visible.sync="dialogVisible"
+            width="50%">
+            <div >
+                <el-form label-width="150px">
+                    <el-form-item
+                        v-for="param in inputingParams"
+                        v-bind:key="param.name"
+                        :label="param.name"
+                        >
+                        <div v-if="param.type=='bool'">
+                                <el-radio-group v-model="param.value">
+                                <el-radio  label='true'/>
+                                <el-radio label='False'/>
+                                </el-radio-group>
+                        </div>
+                        <div v-else-if="param.type=='model'">
+                            <el-select v-model="param.value" placeholder="请选择">
+                                <el-option
+                                    v-for="file in model_files"
+                                    :key="file.name"
+                                    :label="file.name"
+                                    :value="file.name"
+                                >
+                                </el-option>
+                            </el-select>
+                        </div>
+                        <div v-else-if="param.type=='option'">
+                            <el-select v-model="param.value" placeholder="请选择">
+                                <el-option
+                                    v-for="option in param.options"
+                                    :key="option"
+                                    :label="option"
+                                    :value="option"
+                                >
+                                </el-option>
+                            </el-select>                                            
+                        </div>    
+                        <div  v-else-if="param.type=='option_add'">
+                            <div v-for="(s_param, index) in param.value"
+                                :key='index'
+                                :value='s_param'
+                            >
+                                <el-input class="param_item" v-model="s_param.column"/>
+                                <el-select class="param_item"  v-model="s_param.value">
+                                    <el-option
+                                        v-for="option in param.options"
+                                        :key="option"
+                                        :label="option"
+                                        :value="option"
+                                    >
+                                    </el-option>
+                                </el-select>
+                                <el-button @click="add_param(param)" size="small"  circle icon="el-icon-plus"></el-button>
+                                <el-button @click="delete_param(param, index)" size="small"  circle icon="el-icon-delete"></el-button>                                                
+                            </div >                                            
+                        </div>                                                                             
+                        <div v-else>
+                            <el-input v-model="param.value" :placeholder="param.tip"/>
+                        </div>                                        
+                    </el-form-item>
+                </el-form>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -116,6 +211,8 @@ import Page from './page';
 import Editor from './editor';
 import './register-items.js';
 import {saveTask, getTask} from '@/api/userTask'
+import {getFileInfos} from '@/api/file'
+
 
 export default {
     components: {
@@ -127,12 +224,311 @@ export default {
     extends: Editor,
     data() {
         return {
+            dialogVisible: false,
             temp: 'base-flow-editor',
             tempInputingLabel: '',
             tempColor: '',
             tempParams: null,
             data : {},
-        };
+            model_files:[],
+            tree_data: [
+                {
+                    label: '数据预处理',
+                    type:'DataPreprocess',
+                    children: [
+                        {
+                            label: '数据格式转换',
+                            type:'FileComponent',
+                            isLeaf: true
+                        },
+                       {
+                            label: '缺失值填充',
+                            type:'Impute',
+                            isLeaf: true
+                        },{
+                            label: '列删除',
+                            type:'DeleteColumn',
+                            isLeaf: true                            
+                        },{
+<<<<<<< HEAD
+                            label: '数据文件预览',
+                            type: 'Preview',
+                            isLeaf: true
+                        },{
+                            label: '类别编码',
+                            type: 'CategoryEncoder',
+                            isLeaf: true                            
+                        },{
+                            label: '值缩放',
+                            type: 'Scaler',
+                            isLeaf: true                            
+                        },{
+                            label: 'K桶离散化',
+                            type: 'KBinsDiscretizer',
+                            isLeaf: true                            
+                        }
+                    ]
+                }, {
+                    label: '数据集',
+                    type:'Dataset',
+                    children:[
+                        {
+                            label: '数据集生成',
+                            type:'DatasetGenerate',
+                            isLeaf: true                                
+                        }
+                    ]
+                },
+                {
+=======
+                            label: '数据集生成',
+                            type:'DatasetGenerate',
+                            isLeaf: true                                
+                        },
+                        {
+                            label: 'Play',
+                            type:'Play',
+                            isLeaf: true                                
+                        },{
+                            label: '数据文件预览',
+                            type: 'Preview',
+                            isLeaf: true
+                        }
+                    ]
+                }, {
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                    label: '特征处理',
+                    type:'FeaturePreprocess',    
+                    children:[
+                        {
+                            label: '特征正则化',
+                            type:'Normalize',
+                            isLeaf: true                                
+                        },
+                    ]                
+                },{
+                    label: '分类算法',
+                    type: 'Classification',
+                    children:[
+                        {
+                            label:'逻辑回归',
+                            type:'LogisticRegression',
+                            isLeaf:true
+                        },
+                        {
+                            label:'支持向量机',
+                            type:'SupportVectorMachine',
+                            isLeaf:true                            
+                        },{
+                            label:'朴素贝叶斯',
+                            type:'Bayes',
+                            isLeaf:true                               
+                        },{
+<<<<<<< HEAD
+                            label:'随机森林分类器',
+                            type:'RandomForestClassifier',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'K最近邻分类器',
+                            type:'KNearestNeighbor',
+                            isLeaf:true
+                        },{
+                            label:'决策树分类器',
+                            type:'DecisionTree',
+                            isLeaf:true
+                        },{
+                            label:'AdaBoost分类器',
+=======
+                            label:'随机森林',
+                            type:'random-forest',
+                            isLeaf:true                                  
+                        },
+                        {
+                            label:'K近邻',
+                            type:'KNearestNeighbor',
+                            isLeaf:true
+                        },
+                        {
+                            label:'决策树',
+                            type:'DecisionTree',
+                            isLeaf:true
+                        },{
+                            label:'AdaBoost',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'AdaBoost',
+                            isLeaf:true                                  
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'梯度提升树分类器',
+=======
+                            label:'梯度提升树',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'GradientBoosting',
+                            isLeaf:true
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'随机梯度下降分类器',
+                            type:'SGDClassifier',
+                            isLeaf:true
+                        }                          
+=======
+                            label:'随机梯度下降',
+                            type:'SGDClassifier',
+                            isLeaf:true
+                        }                            
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                    ]
+                }, {
+                    label: '聚类算法',
+                    type:'Cluster',
+                    children:[
+                        {
+                            label:'k均值聚类',
+                            type:'k-means',
+                            isLeaf:true
+<<<<<<< HEAD
+                        },{
+                            label:'均值漂移',
+                            type:'MeanShift',
+                            isLeaf:true
+                        },{
+                            label:'谱聚类',
+                            type:'SpectralClustering',
+                            isLeaf:true
+                        },{
+                            label:'高斯混合模型',
+                            type:'GaussianMixture',
+                            isLeaf:true
+                        },{
+                            label:'BIRCH聚类',
+                            type:'Brich',
+                            isLeaf:true
+=======
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                        }
+                    ]
+                },{
+                    label:'回归算法',
+                    type:'Regression',
+                    children:[
+                        {
+                            label:'线性回归',
+                            type:'LinearRegression',
+                            isLeaf:true
+                        },
+                        {
+                            label:'支持向量机回归',
+                            type:'SupportVectorRegression',
+                            isLeaf:true                            
+                        },
+                        {
+                            label:'贝叶斯线性回归',
+                            type:'BayesianRidge',
+                            isLeaf:true                               
+                        },{
+<<<<<<< HEAD
+                            label:'随机森林回归',
+=======
+                            label:'随机森林',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'random-forest-re',
+                            isLeaf:true                                  
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'K近邻回归',
+=======
+                            label:'K近邻',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'KNearestNeighborRe',
+                            isLeaf:true
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'决策树回归',
+                            type:'DecisionTreeRe',
+                            isLeaf:true
+                        }, {
+                            label:'AdaBoost回归',
+=======
+                            label:'决策树',
+                            type:'DecisionTreeRe',
+                            isLeaf:true
+                        }, {
+                            label:'AdaBoost',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'AdaBoostRe',
+                            isLeaf:true                                  
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'梯度提升树回归',
+=======
+                            label:'梯度提升树',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'GradientBoostingRe',
+                            isLeaf:true
+                        },
+                        {
+<<<<<<< HEAD
+                            label:'随机梯度下降回归',
+=======
+                            label:'随机梯度下降',
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                            type:'SGDRegressor',
+                            isLeaf:true
+                        }                        
+                    ]                    
+                },{
+                    label: '评估',
+                    type:'Estimate',
+                    children:[
+                        {
+                            label:'二分类评估',
+                            type:'BiClassificationEval',
+                            isLeaf:true                            
+                        },
+                        {
+                            label:'多分类评估',
+                            type:'ClassificationEval',
+                            isLeaf:true                            
+<<<<<<< HEAD
+                        },
+                        {
+                            label:'回归评估',
+                            type:'RegressionEval',
+                            isLeaf:true                            
+                        },
+                        {
+                            label:'聚类评估',
+                            type:'ClusterEval',
+                            isLeaf:true                            
+                        }                         
+                    ]                    
+                },{
+                    label:'测试用',
+                    type: 'play',
+                    children:[
+                        {
+                            label: 'Play',
+                            type:'Play',
+                            isLeaf: true                                
+                        }
+                    ]
+=======
+                        },{
+                            label:'回归评估',
+                            type:'RegressionEval',
+                            isLeaf:true                            
+                        }                        
+                    ]                    
+>>>>>>> 26834db2e373429b3393ac8503d74372ba3ef35f
+                }
+                ]            
+            };
     },
     computed: {
         inputingLabel: {
@@ -141,7 +537,6 @@ export default {
             },
             set(value) {
                 this.updateGraph('label', value);
-
                 this.tempInputingLabel = null;
             }
         },
@@ -154,7 +549,6 @@ export default {
                 this.updateGraph('params', value)
                 this.tempParams = null
             }
-
         },
         color: {
             get() {
@@ -172,7 +566,6 @@ export default {
         page.changeAddEdgeModel({
             shape: 'line'
         });
-
         // 输入锚点不可以连出边
         page.on('hoveranchor:beforeaddedge', ev => {
             if (ev.anchor.type === 'input') {
@@ -193,8 +586,8 @@ export default {
                 ev.cancel = true;
             }
         });
-
         this.getUserTaskInfo();
+        this.fetchModelData()
 
     },
     methods: {
@@ -212,15 +605,12 @@ export default {
             saveTask(params).then(response => {
                 this.$message("保存成功");
             })
-
         },
-
         changeEage(type) {
             this.page.changeAddEdgeModel({
                 shape: type
             });
         },
-
         getUserTaskInfo() {
             const taskname = this.$store.getters.taskname;
             if(taskname.length == 0){
@@ -238,18 +628,43 @@ export default {
                     console.log(task_info)
                     this.data = JSON.parse(s_data)
                     this.page.read(this.data)
-
                 })
             }
+        },
+        fetchModelData() {
+            const params = {
+                username: this.$store.getters.name,
+                type: 'model'
+            }
+            getFileInfos(params).then(response =>{
+                this.model_files = response.data
+                console.log(this.model_files)
+            })
+        },        
+        add_param(param){
+            param.value.push({
+                'column':"",
+                "value":""
+            })
+            console.log(param)
+        },
+        delete_param(param, index){
+            if (param.value.length == 1){
+                this.$message("至少保留一个参数");
+                return
+            }
 
+            param.value.splice(index, 1)
+            console.log(param)
+        }        
 
-        }
 
 
     }
 };
 </script>
 <style lang="scss">
+
 #itempannel{
   height: 100%;
   position: absolute;
@@ -261,10 +676,7 @@ export default {
   border-right: 1px solid #E6E9ED;
   text-align: left;
 }
-#itempannel ul{
-  padding: 0px;
-  padding-left: 16px;
-}
+
 #itempannel li{
   color: rgba(0,0,0,0.65);
   border-radius: 4px;
@@ -275,6 +687,7 @@ export default {
   border: 1px solid rgba(0,0,0,0);
   list-style-type: none;
 }
+
 #itempannel .pannel-type-icon{
   width: 16px;
   height: 16px;
@@ -283,18 +696,20 @@ export default {
   margin-right: 8px;
   background: url(https://gw.alipayobjects.com/zos/rmsportal/czNEJAmyDpclFaSucYWB.svg)
 }
+
 #itempannel li:hover{
   background: white;
   border: 1px solid #CED4D9;
   cursor: move;
 }
+
 #detailpannel{
   height: 100%;
   position: absolute;
   right: 0px;
   z-index: 2;
   background: #F7F9FB;
-  width: 200px;
+  width: 350px;
   border-left: 1px solid #E6E9ED;
 }
 #detailpannel .pannel{
@@ -303,20 +718,14 @@ export default {
 #detailpannel .block-containe{
   padding-top: 20px;
 }
-#detailpannel .input{
-  margin-left: 16px;
+
+#detailpannel .param_item{
+  width: 90px;
 }
-#detailpannel .name-input{
-  width: 120px;
-}
-#detailpannel .width-input{
-  width: 52px;
-}
-#detailpannel .height-input{
-  width: 52px;
-}
+
+
 #detailpannel .block-container{
-  padding: 16px 8px;
+  padding: 16px 5px;
   text-align: left;
 }
 .bottom-container{

@@ -67,6 +67,28 @@ public class AlComponentController {
         return Result.success();    
     }
 
+    @PostMapping(value = "/stopTask")
+    public Result<String> stopTask(String username, String taskname) {
+        log.info("stop task{}",taskname);
+
+        String taskRoot = filePath + "/" + username + "/tasks/";
+        UserTaskInfo userTaskInfo = service.getUserTaskInfo(taskRoot, taskname);
+        if(userTaskInfo == null){
+            return Result.error404("任务不存在", "");
+        }
+        long PID = userTaskInfo.getRunTaskInfo().getThreadPID();
+        if(PID == -1){
+            return Result.error404("任务未在运行或运行已结束，请刷新", "失败");
+        }
+        boolean flag = manager.stopTask(userTaskInfo.getRunTaskInfo().getTaskId());
+        if(flag){
+            return Result.success("任务停止成功");
+        }
+        return Result.error500("任务停止失败", "");
+
+    }
+    
+
     /**
      *  用序列化和反序列化对任务进行存储和读取 
      */

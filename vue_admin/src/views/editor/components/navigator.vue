@@ -47,7 +47,7 @@ export default {
 </script>
 <style lang="scss">
 #navigator{
-  width: 200px;
+  width: 350px;
   height: 182px;
   position: absolute;
   bottom: 0px;

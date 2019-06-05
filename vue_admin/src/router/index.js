@@ -39,11 +39,12 @@ export const constantRouterMap = [
   {
     path: '/resourceManage',
     component: Layout,
-    meta: { title: '资源管理', icon: 'manage' },
+    meta: { title: '文件管理', icon: 'manage' },
     redirect: '/resourceManage/data',
     children: [
       {
         path: '/resourceManage/data',
+        name: 'data',
         component: () => import('@/views/resourceManage/index'),
         props: { type: 'data'},
         meta: { title: '数据文件', icon: 'file'}
@@ -51,35 +52,51 @@ export const constantRouterMap = [
       },
       {
         path: '/resourceManage/model',
+        name:'model',
         component: () => import('@/views/resourceManage/index'),
         props: { type: 'model' },
         meta: { title: '模型文件', icon: 'file' }
 
-      }
+      },
+      {
+        path: '/resourceManage/metrics',
+        name: 'metrics',
+        component: () => import('@/views/resourceManage/index'),
+        props: { type: 'metrics' },
+        meta: { title: '评估结果', icon: 'file' }
+
+      }      
     ]
     
   },{
     path: '/taskManage',
     component: Layout,
+    meta: { title: '任务台', icon: 'manage' },    
     children: [
       {
-        path: 'index',
+        path: '/taskManage/index',
         name: 'TaskManage',
         component: () => import('@/views/taskManage/index'),
         meta: { title: '任务管理' , icon: 'tasks'},
-      }
-    ]
-  },{
-    path: '/editor',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
+      },{
+        path: '/editor',
         name: 'editor',
         component: () => import('@/views/editor/model-flow'),
-        meta: { title:'实验台', icon: 'tree'}
+        meta: { title:'算法建模', icon: 'tree'}
       }
+
     ]
+  },{
+    path: '/monitor',
+    component: Layout,
+    redirect: '/monitor/index',    
+    name:'system',
+    meta: { title: '系统资源监控', icon: '' },    
+    children: [{
+      path: 'index',
+      component: () => import('@/views/monitor/index'),
+      meta: { title: '系统资源监控', icon: 'monitor' },    
+    }]
   },
 
 

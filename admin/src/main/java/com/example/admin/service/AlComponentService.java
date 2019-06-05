@@ -44,7 +44,6 @@ public class AlComponentService {
     // 更新用户任务信息
     public void saveUserTaskInfo(String taskRoot, String taskname, UserTaskInfo taskInfo){
         String task_info_path = Paths.get(taskRoot, taskname, "taskInfo.json").toString();
-        log.info("info: {}, save to:{}",taskInfo.toString(), task_info_path);
         taskInfo.saveTo(task_info_path);
         
     }
@@ -60,6 +59,7 @@ public class AlComponentService {
         taskInfo.setRunResult(runResult);
         this.saveUserTaskInfo(taskRoot, taskname, taskInfo);
     }
+
 
     public List<UserTaskInfo> getUserTaskInfos(String taskRoot,List<String> tasknames){
         List<UserTaskInfo> infos = new ArrayList<UserTaskInfo>(); 
@@ -131,7 +131,12 @@ public class AlComponentService {
             for (int j = 0; j < params.length(); j++) {
                 JSONObject param = params.getJSONObject(j);
                 String key = param.getString("name");
-                String value = param.getString("value");
+                String value = "";
+                try{
+                    value = param.getString("value");
+                }catch(Exception e){
+                    value = param.getJSONArray("value").toString();
+                }
                 component.params.setParam(key, value);
             }
             componetMap.put(id, component);
@@ -140,10 +145,12 @@ public class AlComponentService {
         HashMap<String, String> edgesMap = new HashMap<String, String>();
         HashSet<String> targets = new HashSet<String>();
         JSONArray edges = null;
-        try{
-            edges = graph.getJSONArray("edges");
-        }catch(Exception e){
-            e.printStackTrace();
+        if (graph.has("edges")){
+            try{
+                edges = graph.getJSONArray("edges");
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         if(edges == null){
             if(componetMap.size() > 1)

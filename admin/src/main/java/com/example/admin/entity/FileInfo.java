@@ -8,4 +8,6 @@ public class FileInfo {
     private String name;
 
     private long size;
+
+    private String time;
 }

@@ -32,7 +32,7 @@
         <span class="separator"/>
         <el-radio-group
             v-model="lineType"
-            size="mini">
+            size="mini" >
             <el-radio-button label="line" title="虚线">
                 <svg-icon icon-class="dotted_line" />
             </el-radio-button>
@@ -45,7 +45,7 @@
         </el-radio-group>
         <span class="separator"/>
         任务名:{{taskname.length == 0 ? "当前任务为空": taskname}} |
-        <el-select size="small" v-model="curBeginFile" placeholder="输入文件">
+        <el-select size="small" v-model="curBeginFile" placeholder="输入文件" > 
             <el-option
                 v-for="file in files"
                 :key="file.name"
@@ -117,6 +117,19 @@ export default {
                     this.$message.info("保存至新任务"+this.new_taskname);
                     this.$emit('save',this.new_taskname, this.curBeginFile, this.curEndFile);
                 }
+                this.$confirm('回到任务管理界面?', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                                }).then(() => {
+                                    this.$message("跳转成功");
+                                    this.$router.push({path:'/taskManage/index'});
+                                }).catch(() => {
+                                this.$message({
+                                    type: 'info',
+                                    message: '继续编辑'
+                                });          
+                    });                 
             }
         }
 
@@ -159,6 +172,8 @@ export default {
   display: inline-block;
   border: 1px solid rgba(2,2,2,0);
 }
+
+
 #toolbar .command:nth-of-type(1){
   margin-left: 24px;
 }

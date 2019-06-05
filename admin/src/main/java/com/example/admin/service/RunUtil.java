@@ -3,6 +3,7 @@ package com.example.admin.service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.admin.algorithms.RunResult;
@@ -43,7 +44,9 @@ public class RunUtil {
                 runLog = runLog + "\n" + line;
             }
             in.close();
-            result.setRunLog(runLog);
+            ArrayList<String> runLog_list = new ArrayList<String>();
+            runLog_list.add(runLog);
+            result.setRunLog(runLog_list);
 
             BufferedReader errIn = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             while ((line = errIn.readLine()) != null) {

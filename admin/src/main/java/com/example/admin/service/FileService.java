@@ -1,5 +1,6 @@
 package com.example.admin.service;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import com.example.admin.entity.FileInfo;
@@ -27,5 +28,7 @@ public interface FileService {
     List<String> listDirs(String username, String type);
 
     boolean deleteDir(String username, String type, String dirname);
+
+    Path local_path(String username, String type);   
 
 } 

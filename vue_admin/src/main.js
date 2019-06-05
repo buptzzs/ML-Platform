@@ -4,7 +4,7 @@ import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 
 import DataTables from 'vue-data-tables'
 
@@ -16,10 +16,13 @@ import store from './store'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import VCharts from 'v-charts'
 
 
 Vue.use(ElementUI, { locale })
 Vue.use(DataTables)
+Vue.use(VCharts)
+
 
 Vue.config.productionTip = false
 

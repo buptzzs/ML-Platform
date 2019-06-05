@@ -9,16 +9,14 @@ import com.example.admin.algorithms.Params;
 import com.example.admin.algorithms.RunResult;
 import com.example.admin.service.RunUtil;
 
-import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class LinearRegression extends AlComponent {
 
-    private static String pyFile = "linear_regression.py";
+    private static String pyFile = "linearRegression.py";
 
     private RunUtil runUtil = new RunUtil();
 
@@ -54,7 +52,7 @@ public class LinearRegression extends AlComponent {
 
     private class FileParams extends Params {
         FileParams() {
-            setParam("train", "False");
+            setParam("train", "True");
             setParam("ratio", "0.2");
             setParam("model_name", "linear_test");
             setParam("model","");

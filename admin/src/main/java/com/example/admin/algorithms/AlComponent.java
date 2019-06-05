@@ -8,10 +8,15 @@ public class AlComponent {
     
     public String name;
 
+
     public ComponentType type;
 
     public RunResult run(String root, String inFile, String outFile) {
         return null;
+    }
+
+    public String out_postfix(){
+        return "csv";
     }
 
 
